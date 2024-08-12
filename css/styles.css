@@ -1,0 +1,299 @@
+*{
+    margin: 0%;
+    padding: 0%;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+body{
+    position: relative;
+    min-height: 100vh;
+    height: 100%;
+    width: 100%;   
+}
+.whole{
+    width:100%;
+    height:100%;
+    margin: 0%;
+    padding:0%;
+}
+.sidebar ul li a.selected{
+    background-color: #ffffff;
+    color: #1c1b2c;
+
+}
+.sidebar.active ul li a.selected{
+    background-color: #ffffff;
+    color: #1c1b2c;
+
+}
+
+.sidebar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 70px;
+    background: #11101d;
+    padding: 15px 10px;
+    transition: all 0.5s ease;
+}
+
+.sidebar.active{
+    width: 300px;
+}
+
+.sidebar .logo_content{
+    width: 100%;
+    height: 7%;
+    display: flex;
+    color: #fff;
+
+}
+.sidebar .logo_content .logo{
+    width: 80%;
+    display: flex;  
+    opacity: 0;
+    pointer-events: none; 
+    transition: all 0.5s ease;
+}
+
+.sidebar.active .logo_content .logo{
+    opacity: 1;
+    pointer-events: none;
+
+}
+.sidebar .logo_content .logo i{
+    width: 25%;
+    font-size: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.sidebar .logo_content .logo .logo_name{
+    width: 75%;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    white-space: nowrap;
+}
+
+.sidebar .logo_content #btn{
+    position: absolute;
+    height: 7%;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    transform: translate(-50%);
+}
+.sidebar.active #btn{
+    left: 90%;
+    
+}
+
+.sidebar ul li{
+    height: 40%;
+    width: 100%;
+    line-height: 50px;
+    list-style: none;
+}
+
+
+.sidebar ul li a{
+    background-color: #11101d;
+    color: #fff;
+    display: flex;
+    margin-top: 15px;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.4s ease;
+    border-radius: 12px;
+    text-align: center;
+    white-space: nowrap;
+}
+.sidebar.active ul li a{
+    background-color: #1c1b2c;
+    
+}
+
+.sidebar ul li a:hover{
+    color: #11101d;
+    background: #fff;
+}
+
+.sidebar ul li a i{
+    font-size: 20px;
+    height: 50px;
+    min-width: 50px;
+    border-radius: 12px;
+    line-height: 50px;
+}
+
+.sidebar .links_name{
+    opacity: 0;
+    pointer-events: none;   
+}
+
+.sidebar.active .links_name{
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.main-content{
+    position: absolute;
+    height: 100%;
+    width: calc(100% - 70px);
+    left: 70px;
+    padding:1% 2%;
+    transition: all 0.5s ease;
+}
+.sidebar.active ~ .main-content{
+    width: calc(100% - 300px);
+    left: 300px;
+}
+.add-user{
+    width:100%;
+    height:45%;
+}
+.user-list{
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    width:100%;
+    height:45%;
+}
+form{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+form input{
+    padding: 0.5%;
+    margin:1%;
+    width:30%;
+    outline: none;
+    border-top-left-radius: 17px;
+    border-bottom-left-radius: 17px;
+    border-top-right-radius: 17px;
+    border-bottom-right-radius: 17px;
+}
+.form-title{
+    height:5%;
+    width:80%;
+    display: flex;
+    align-items: flex-start;
+}
+.form-title h3{
+    margin: 0%;
+}
+.table-title{
+    height:5%;
+    width:80%;
+    display: flex;
+    align-items: flex-start;
+}
+.table-title h3{
+    margin: 0%;
+}
+table {
+    margin-top: 1%;
+    margin-left: 4%;
+    width: 80%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #5D3FB3;
+    color: white;
+}
+.group-management{
+    width:100%;
+    height:90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.group-management h3{
+    margin:0%;
+}
+.group-form{
+    width: 100%;
+    height: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.group-form-title,.group-list-title,.group-adddelete-title{
+    height:5%;
+    width:80%;
+    display: flex;
+    align-items: flex-start;
+}
+.group-list{
+    width:100%;
+    height:45%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.adddelete-users-to-group-form{
+    width:100%;
+    height:30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+form select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+}
+.user-management{
+    width:100%;
+    height:90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.user-management,.group-management,.role-management{
+    display: none;
+}
+.user-management.active, .group-management.active, .role-management.active {
+    display: block;
+}
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
