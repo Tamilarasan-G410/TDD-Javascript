@@ -83,13 +83,6 @@ describe('HTML Testing', () => {
             const groupListTable = document.querySelector('#groupsTable');
             const groupListheaders = groupListTable.querySelectorAll('thead th');
             const groupListHeaderTexts = Array.from(groupListheaders).map(header => header.textContent.trim());
-            const addDeleteFormTitle = document.querySelector('.adddelete-users-to-group-form h3');
-            const addDeleteForm = document.querySelector('#addUsersToGroupForm');
-            const addDeleteGroupLabel = document.querySelector('label[for="selectGroup"]');
-            const addDeletGroupSelect = document.querySelector('#selectGroup');
-            const usersLabel = document.querySelector('label[for="selectUsers"]');
-            const usersSelect = document.querySelector('#selectUsers');
-            const addGroupButton = document.querySelector('.addGroup');
  
             //Whether the create group form is displayed
             expect(groupFormTitle.textContent).toBe('Create Group');
@@ -104,19 +97,6 @@ describe('HTML Testing', () => {
             expect(groupListTitle.textContent).toBe('Groups List');
             expect(groupListTable).not.toBeNull();
             expect(groupListHeaderTexts).toEqual(['Group Name', 'Actions']);
-              
-            
-            //whether the Add/Delete Users to Group form is displayed
-            expect(addDeleteFormTitle.textContent).toBe('Add/Delete Users to Group');
-            expect(addDeleteForm).not.toBeNull();
-            expect(addDeleteGroupLabel.textContent).toBe('Select Group:');
-            expect(addDeletGroupSelect).not.toBeNull();
-            expect(addDeletGroupSelect.required).toBe(true);
-            expect(usersLabel.textContent).toBe('Select Users:');
-            expect(usersSelect).not.toBeNull();
-            expect(usersSelect.required).toBe(true);
-            expect(addGroupButton.textContent).toBe('Add Users to Group');
-            
         });
     });
     describe('Roles-page testing',()=>{
@@ -221,6 +201,12 @@ describe('Javascript testing',()=>{
     let lastName;
     let emailID;
     let form;
+    let groupNameInput;
+    let createGroupForm;
+    let logo;
+    let sidebar;
+    let groupNameElement;
+    let userListElement;
     
 
     beforeEach(()=>{
@@ -232,6 +218,12 @@ describe('Javascript testing',()=>{
         lastName = document.querySelector("#lastName")
         emailID = document.querySelector("#emailID")
         form = document.querySelector('.add-user-form')
+        groupNameInput = document.querySelector('#groupName');
+        createGroupForm = document.querySelector('#createGroupForm');
+        logo = document.querySelector('.logo');
+        sidebar = document.querySelector('.sidebar');
+        groupNameElement = document.getElementById('groupName');
+        userListElement = document.getElementById('userList');
 
         jest.resetModules();
         require('./script.js');
@@ -253,6 +245,15 @@ describe('Javascript testing',()=>{
         localStorage.removeItem.mockClear();
         localStorage.clear.mockClear();
     });
+    describe('Sidebar testing',()=>{
+        test('sidebar class toggles when logo is clicked', () => {
+            expect(sidebar.classList.contains('active')).toBe(false);
+            logo.click();
+            expect(sidebar.classList.contains('active')).toBe(true);
+            logo.click();
+            expect(sidebar.classList.contains('active')).toBe(false);
+        });
+    })
     describe('Add user functionality testing',()=>{
         test('User gets added when all the necessary details are entered and submitted',()=>{
             userName.value='tamilarasan';
@@ -317,6 +318,29 @@ describe('Javascript testing',()=>{
             expect(secondDeleteButton.getAttribute('data-index')).toBe('1');
         })
     })
+    describe('Edit functionality testing',()=>{
+        test('editUser function populates the form with user data and deletes the user', () => {
+            const { editUser} = require('./script.js');
+            const mockUsers = [
+                { userName: 'john_doe', emailID: 'john@example.com', firstName: 'John', lastName: 'Doe' },
+                { userName: 'jane_smith', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' }
+            ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockUsers));
+            editUser(0);
+    
+            // Check if form fields are populated correctly
+            expect(userName.value).toBe(mockUsers[0].userName);
+            expect(firstName.value).toBe(mockUsers[0].firstName);
+            expect(lastName.value).toBe(mockUsers[0].lastName);
+            expect(emailID.value).toBe(mockUsers[0].emailID);
+    
+    
+            const updatedUsers = [
+                { userName: 'jane_smith', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' }
+            ];
+            expect(localStorage.setItem).toHaveBeenCalledWith('users', JSON.stringify(updatedUsers));
+        });
+    })
     describe('Delete user functionality testing',()=>{
         test('The user is deleted when the delete function is called', () => {
             const{renderUsers,deleteUser}=require("./script.js")
@@ -345,4 +369,280 @@ describe('Javascript testing',()=>{
         });
         
     });
+    describe('handleUserActions function', () => {
+        let usersTableBody;
+    
+        beforeEach(() => {
+            usersTableBody = document.querySelector('#usersTable tbody');
+    
+            // Render some dummy users for testing
+            const mockUsers = [
+                { userName: 'john_doe', emailID: 'john@example.com', firstName: 'John', lastName: 'Doe' },
+                { userName: 'jane_smith', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' }
+            ];
+    
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockUsers));
+            const { renderUsers } = require('./script.js');
+            renderUsers();
+        });
+    
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+    
+        test('Clicking the edit button populates the form with the user\'s data and deletes the user', () => {
+            // Get the edit button and click it
+            const editButton = document.querySelector('.edit');
+            const index = editButton.dataset.index;
+    
+            // Create a mock event with the appropriate target
+            const event = {
+                target: editButton
+            };
+    
+            // Call handleUserActions with the simulated event
+            const { handleUserActions, editUser, deleteUser } = require('./script.js');
+            handleUserActions(event);
+    
+            // Verify that the form is populated with the user's data
+            const userNameInput = document.querySelector('#userName');
+            const firstNameInput = document.querySelector('#firstName');
+            const lastNameInput = document.querySelector('#lastName');
+            const emailIDInput = document.querySelector('#emailID');
+            expect(userNameInput.value).toBe('john_doe');
+            expect(firstNameInput.value).toBe('John');
+            expect(lastNameInput.value).toBe('Doe');
+            expect(emailIDInput.value).toBe('john@example.com');
+    
+            // Verify that the user is deleted
+            const remainingRows = usersTableBody.querySelectorAll('tr');
+            expect(remainingRows.length).toBe(1);
+            expect(remainingRows[0].children[0].textContent).toBe('jane_smith');
+        });
+    
+        test('Clicking the delete button removes the user from the list', () => {
+            // Get the delete button and click it
+            const deleteButton = document.querySelector('.delete');
+            const index = deleteButton.dataset.index;
+    
+            // Create a mock event with the appropriate target
+            const event = {
+                target: deleteButton
+            };
+    
+            // Call handleUserActions with the simulated event
+            const { handleUserActions } = require('./script.js');
+            handleUserActions(event);
+    
+            // Verify that the user is deleted
+            const remainingRows = usersTableBody.querySelectorAll('tr');
+            expect(remainingRows.length).toBe(1);
+            expect(remainingRows[0].children[0].textContent).toBe('john_doe');
+        });
+    });
+    describe('Group Management', () => {
+        test('createGroup adds a group to localStorage and renders it', () => {
+            groupNameInput.value = 'Developers';
+            createGroupForm.dispatchEvent(new Event('submit'));
+
+            expect(localStorage.setItem).toHaveBeenCalledWith("groups", JSON.stringify([{
+                groupName: 'Developers',
+                users: []
+            }]));
+        });
+
+        test('Groups are displayed in the group table after getting added', () => {
+            const { renderGroups } = require("./script.js");
+            const mockGroups = [
+                { groupName: 'Admins', users: ['john_doe'] },
+                { groupName: 'Users', users: [] }
+            ];
+
+            // Mock the return value of loadFromLocalStorage
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockGroups));
+
+            // Call the function to test
+            renderGroups();
+            const groupsTableBody = document.querySelector('#groupsTable tbody');
+            // Check the number of rows
+            expect(groupsTableBody.children.length).toBe(2);
+
+            // Check each row's content
+            const firstRow = groupsTableBody.children[0];
+            expect(firstRow.children[0].textContent).toBe(mockGroups[0].groupName);
+            const firstViewButton = firstRow.querySelector('.view');
+            expect(firstViewButton.getAttribute('data-index')).toBe('0');
+
+            const secondRow = groupsTableBody.children[1];
+            expect(secondRow.children[0].textContent).toBe(mockGroups[1].groupName);
+            const secondViewButton = secondRow.querySelector('.view');
+            expect(secondViewButton.getAttribute('data-index')).toBe('1');
+        });
+
+        test('openAddRemoveUserModal shows the modal and populates the user select dropdown', () => {
+            const { openAddRemoveUserModal, populateUserSelect } = require("./script.js");
+            openAddRemoveUserModal(0);
+            expect(addRemoveUserModal.style.display).toBe('block');
+
+            // Check if users are populated
+            const mockUsers = [
+                { userName: 'john_doe', firstName: 'John', lastName: 'Doe', emailID: 'john@example.com' }
+            ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockUsers));
+            populateUserSelect();
+            const userSelect = document.getElementById('userSelect');
+            expect(userSelect.children.length).toBe(2); // 1 for default option and 1 for user
+        });
+    });
+    describe('editGroup and deleteGroup functions', () => {
+        let groupNameInput;
+        let groupsTableBody;
+    
+        beforeEach(() => {
+            // Get references to necessary elements
+            groupNameInput = document.querySelector('#groupName');
+            groupsTableBody = document.querySelector('#groupsTable tbody');
+    
+            // Load initial groups data into local storage
+            const mockGroups = [
+                { groupName: 'Admins', users: ['john_doe', 'jane_smith'] },
+                { groupName: 'Editors', users: ['mary_jones'] }
+            ];
+    
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockGroups));
+            const { renderGroups } = require('./script.js');
+            renderGroups();
+        });
+    
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+    
+        test('editGroup populates the form with the group name and then deletes the group', () => {
+            const { editGroup } = require('./script.js');
+    
+            // Simulate editing the first group
+            editGroup(0);
+    
+            // Verify the groupNameInput is populated with the group name
+            expect(groupNameInput.value).toBe('Admins');
+    
+            // Verify the group is deleted
+            expect(localStorage.setItem).toHaveBeenCalledWith(
+                'groups',
+                JSON.stringify([{ groupName: 'Editors', users: ['mary_jones'] }])
+            );
+    
+            // Verify the groups table is updated
+            const remainingRows = groupsTableBody.querySelectorAll('tr');
+            expect(remainingRows.length).toBe(1);
+            expect(remainingRows[0].children[0].textContent).toBe('Editors');
+        });
+    
+        test('deleteGroup removes the specified group and updates the groups table', () => {
+            const { deleteGroup, renderGroups } = require('./script.js');
+    
+            // Simulate deleting the first group
+            deleteGroup(0);
+    
+            // Verify the groups are updated in local storage
+            expect(localStorage.setItem).toHaveBeenCalledWith(
+                'groups',
+                JSON.stringify([{ groupName: 'Editors', users: ['mary_jones'] }])
+            );
+    
+            // Verify the groups table is updated
+            renderGroups();
+            const remainingRows = groupsTableBody.querySelectorAll('tr');
+            expect(remainingRows.length).toBe(1);
+            expect(remainingRows[0].children[0].textContent).toBe('Editors');
+        });
+    });
+
+    describe('DOMContentLoaded Event Listener and Sidebar Navigation', () => {
+        let userManagement;
+        let groupManagement;
+        let roleManagement;
+        let sidebarLinks;
+
+        beforeEach(() => {
+            // Get references to necessary elements
+            userManagement = document.querySelector('.user-management');
+            groupManagement = document.querySelector('.group-management');
+            roleManagement = document.querySelector('.role-management');
+            sidebarLinks = document.querySelectorAll('.sidebar ul li a');
+
+            // Simulate DOMContentLoaded
+            document.dispatchEvent(new Event('DOMContentLoaded'));
+        });
+        test('clicking sidebar link activates the correct section', () => {
+            // Initial state: No section should be active
+            expect(userManagement.classList.contains('active')).toBe(false);
+            expect(groupManagement.classList.contains('active')).toBe(false);
+            expect(roleManagement.classList.contains('active')).toBe(false);
+
+            // Simulate clicking the user management link
+            const userLink = document.querySelector('a[href="#user-management"]');
+            userLink.click();
+
+            // Verify that the correct section is active
+            expect(userManagement.classList.contains('active')).toBe(true);
+            expect(groupManagement.classList.contains('active')).toBe(false);
+            expect(roleManagement.classList.contains('active')).toBe(false);
+
+            // Simulate clicking the group management link
+            const groupLink = document.querySelector('a[href="#group-management"]');
+            groupLink.click();
+
+            // Verify that the correct section is active
+            expect(userManagement.classList.contains('active')).toBe(false);
+            expect(groupManagement.classList.contains('active')).toBe(true);
+            expect(roleManagement.classList.contains('active')).toBe(false);
+
+            // Simulate clicking the role management link
+            const roleLink = document.querySelector('a[href="#role-management"]');
+            roleLink.click();
+
+            // Verify that the correct section is active
+            expect(userManagement.classList.contains('active')).toBe(false);
+            expect(groupManagement.classList.contains('active')).toBe(false);
+            expect(roleManagement.classList.contains('active')).toBe(true);
+        });
+    });
+
+    describe('Display group functionality testing', () => {
+        test('correctly displays group details', () => {
+            // Call the function with groupId 0 (Developers group)
+            const{displayGroupDetails}=require("./script.js")
+            displayGroupDetails(0);
+
+            // Verify that the group name is correctly set
+            expect(groupNameElement.textContent).toBe('Group Name: Developers');
+
+            // Verify that the user list is correctly populated
+            const userItems = userListElement.querySelectorAll('li');
+            expect(userItems.length).toBe(2);
+            expect(userItems[0].textContent).toBe('john_doe');
+            expect(userItems[1].textContent).toBe('jane_smith');
+        });
+
+        test('handles empty user list correctly', () => {
+            // Modify the mock to return a group with an empty user list
+            const{displayGroupDetails,loadFromLocalStorage}=require("./script.js")
+            global.loadFromLocalStorage.mockReturnValue([
+                { groupName: 'EmptyGroup', users: [] }
+            ]);
+
+            // Call the function with groupId 0 (EmptyGroup)
+            displayGroupDetails(0);
+
+            // Verify that the group name is correctly set
+            expect(groupNameElement.textContent).toBe('Group Name: EmptyGroup');
+
+            // Verify that the user list is empty
+            const userItems = userListElement.querySelectorAll('li');
+            expect(userItems.length).toBe(0);
+        });
+    });
+
 })
