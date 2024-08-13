@@ -47,16 +47,23 @@
             <div class="user-management" id="user-management">
                 <header class="header">User management system</header>
                 <div class="add-user">
-                    <form class="add-user-form">
-                        <div class="form-title">
-                            <h3>Add User</h3>
+                    <div class="userBtn">
+                        <button class="newUser" title="Add new user">Add user</button>
+                    </div>
+                    <div class="addUserModal">
+                        <div class="addUserModalContent">
+                            <form class="add-user-form">
+                                <div class="form-title">
+                                    <h3>Add User</h3>
+                                </div>
+                                <input type="text" id="userName" placeholder="Username" autocomplete="off" required>
+                                <input type="text" id="firstName" placeholder="First name" autocomplete="off" required>
+                                <input type="text" id="lastName" placeholder="Last name" autocomplete="off" required>
+                                <input type="text" id="emailID" placeholder="Email id" autocomplete="off" required>
+                                <button class="addButton" type="submit" title="Add the user">Add user</button>
+                            </form>
                         </div>
-                        <input type="text" id="userName" placeholder="Username" autocomplete="off" required>
-                        <input type="text" id="firstName" placeholder="First name" autocomplete="off" required>
-                        <input type="text" id="lastName" placeholder="Last name" autocomplete="off" required>
-                        <input type="text" id="emailID" placeholder="Email id" autocomplete="off" required>
-                        <button class="addButton" type="submit" title="Add the user">Add user</button>
-                    </form>
+                    </div>
                 </div>
                 <div class="user-list">
                     <div class="table-title">
@@ -85,8 +92,7 @@
                         <h3>Create Group</h3>
                     </div>
                     <form id="createGroupForm">
-                        <label for="groupName">Group Name:</label>
-                        <input type="text" id="groupName" required><br>
+                        <input type="text" id="groupName" placeholder="Group name" required><br>
                         <button class="createGroup" type="submit">Create Group</button>
                     </form>
                 </div>
@@ -109,31 +115,32 @@
                 </div>
                 <!-- Add/Remove User Modal -->
                 <div id="addRemoveUserModal" class="modal">
-                    <div class="modal-content">
-                        <span class="close-btn" onclick="closeAddRemoveUserModal()">&times;</span>
+                    <div class="modal-content1">
+                        <span class="close-btn1">&times;</span>
                         <h3>Add/Remove User from Group</h3>
-                        <form id="addUsersToGroupForm">
-                            <input type="hidden" id="currentGroupId">
-                            <label for="userSelect">Select User:</label>
-                            <select id="userSelect" required>
-                                <option value="">Select User</option>
-                                <!-- Options will be populated by JavaScript -->
-                            </select><br>
-                            <label>
-                                <input type="radio" name="action" value="add" required> Add User
-                            </label>
-                            <label>
-                                <input type="radio" name="action" value="remove" required> Remove User
-                            </label><br>
-                            <button type="submit">Submit</button>
-                        </form>
+                        <div id="actionButtons">
+                            <div class="aub"><button type="button" id="showAddUserForm">Add User</button></div>
+                            <div class="rub"><button type="button" id="showRemoveUserForm">Remove User</button></div>
+                        </div>
+                        <div id="userActionForm" style="display: none;">
+                            <form id="addUsersToGroupForm">
+                                <input type="hidden" id="currentGroupId">
+                                <label for="userSelect">Select User:</label>
+                                <select id="userSelect" required>
+                                    <option value="">Select User</option>
+                                    <!-- Options will be populated by JavaScript -->
+                                </select><br>
+                                <button type="button" id="submitAddUserButton" style="display: none;">Add User</button>
+                                <button type="button" id="submitRemoveUserButton" style="display: none;">Remove User</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-
+                
                 <!-- View Group Modal -->
                 <div id="viewGroupModal" class="modal">
-                    <div class="modal-content">
-                        <span class="close-btn" onclick="closeViewGroupModal()">&times;</span>
+                    <div class="modal-content2">
+                        <span class="close-btn2">&times;</span>
                         <h3>Group Details</h3>
                         <p id="groupName"></p>
                         <ul id="userList">

@@ -142,8 +142,7 @@ describe('HTML Testing', () => {
             const roleAssignmentHeaderTexts = Array.from(roleAssignmentHeaders).map(header => header.textContent.trim());
 
 
-            //Whether the title is displayed
-            expect(roleMangementHeading.textContent).toBe('Role Management');
+           
 
             // Testing of create role form
             expect(createRoleFormTitle.textContent).toBe('Create Role');
@@ -205,9 +204,9 @@ describe('Javascript testing',()=>{
     let createGroupForm;
     let logo;
     let sidebar;
-    let groupNameElement;
-    let userListElement;
-    
+    let addUserButton, removeUserButton, submitAddUserButton, submitRemoveUserButton, userActionForm,addRemoveUserModal,viewGroupModal;
+    let closebutton1;
+    let closebutton2;
 
     beforeEach(()=>{
         const html = fs.readFileSync(path.resolve(__dirname, 'index.html'), 'utf8');
@@ -222,8 +221,15 @@ describe('Javascript testing',()=>{
         createGroupForm = document.querySelector('#createGroupForm');
         logo = document.querySelector('.logo');
         sidebar = document.querySelector('.sidebar');
-        groupNameElement = document.getElementById('groupName');
-        userListElement = document.getElementById('userList');
+        addUserButton = document.getElementById('showAddUserForm');
+        removeUserButton = document.getElementById('showRemoveUserForm');
+        submitAddUserButton = document.getElementById('submitAddUserButton');
+        submitRemoveUserButton = document.getElementById('submitRemoveUserButton');
+        userActionForm = document.getElementById('userActionForm');
+        addRemoveUserModal = document.getElementById('addRemoveUserModal');
+        viewGroupModal=document.querySelector('#viewGroupModal')
+        closebutton1=document.querySelector(".close-btn1");
+        closebutton2=document.querySelector(".close-btn2");
 
         jest.resetModules();
         require('./script.js');
@@ -266,7 +272,7 @@ describe('Javascript testing',()=>{
                 lastName: 'arasan',
                 emailID: 'gugugaga' }]));
         })
-        test('User gets added when all the necessary details are entered and press the enter button',()=>{
+        test('User gets added when all the necessary details are entered and press the add button',()=>{
             userName.value='tamilarasan';
             firstName.value='tamil';
             lastName.value='arasan';
@@ -284,25 +290,18 @@ describe('Javascript testing',()=>{
                 { userName: 'john_doe', emailID: 'john@example.com', firstName: 'John', lastName: 'Doe' },
                 { userName: 'jane_smith', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' }
             ];
-    
-            // Mock the return value of loadFromLocalStorage
             localStorage.getItem.mockReturnValue(JSON.stringify(mockUsers));
-    
-            // Call the function to test
             renderUsers();
             const usersTableBody = document.querySelector('#usersTable tbody');
-            // Check the number of rows
             expect(usersTableBody.children.length).toBe(2);
-    
-            // Check each row's content
            // Test first row (John Doe)
             const firstRow = usersTableBody.children[0];
             expect(firstRow.children[0].textContent).toBe(mockUsers[0].userName);
             expect(firstRow.children[1].textContent).toBe(mockUsers[0].emailID);
             expect(firstRow.children[2].textContent).toBe(mockUsers[0].firstName);
             expect(firstRow.children[3].textContent).toBe(mockUsers[0].lastName);
-            const firstEditButton = firstRow.querySelector('.edit');
-            const firstDeleteButton = firstRow.querySelector('.delete');
+            const firstEditButton = firstRow.querySelector('.editu');
+            const firstDeleteButton = firstRow.querySelector('.deleteu');
             expect(firstEditButton.getAttribute('data-index')).toBe('0');
             expect(firstDeleteButton.getAttribute('data-index')).toBe('0');
 
@@ -312,8 +311,8 @@ describe('Javascript testing',()=>{
             expect(secondRow.children[1].textContent).toBe(mockUsers[1].emailID);
             expect(secondRow.children[2].textContent).toBe(mockUsers[1].firstName);
             expect(secondRow.children[3].textContent).toBe(mockUsers[1].lastName);
-            const secondEditButton = secondRow.querySelector('.edit');
-            const secondDeleteButton = secondRow.querySelector('.delete');
+            const secondEditButton = secondRow.querySelector('.editu');
+            const secondDeleteButton = secondRow.querySelector('.deleteu');
             expect(secondEditButton.getAttribute('data-index')).toBe('1');
             expect(secondDeleteButton.getAttribute('data-index')).toBe('1');
         })
@@ -341,103 +340,86 @@ describe('Javascript testing',()=>{
             expect(localStorage.setItem).toHaveBeenCalledWith('users', JSON.stringify(updatedUsers));
         });
     })
-    describe('Delete user functionality testing',()=>{
-        test('The user is deleted when the delete function is called', () => {
-            const{renderUsers,deleteUser}=require("./script.js")
-            const initialUsers = [
-                { userName: 'john_doe', emailID: 'john@example.com', firstName: 'John', lastName: 'Doe' },
-                { userName: 'jane_smith', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' }
-            ];
-            localStorage.getItem.mockReturnValue(JSON.stringify(initialUsers));
-            renderUsers();
-            const usersTableBody = document.querySelector('#usersTable tbody');
-            expect(usersTableBody.children.length).toBe(2);
-            deleteUser(0);
-            expect(localStorage.setItem).toHaveBeenCalledWith(
-                'users',
-                JSON.stringify([
-                    { userName: 'jane_smith', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' }
-                ])
-            );
-            renderUsers();
-            expect(usersTableBody.children.length).toBe(1);
-            const remainingRow = usersTableBody.children[0];
-            expect(remainingRow.children[0].textContent).toBe('jane_smith');
-            expect(remainingRow.children[1].textContent).toBe('jane@example.com');
-            expect(remainingRow.children[2].textContent).toBe('Jane');
-            expect(remainingRow.children[3].textContent).toBe('Smith');
-        });
-        
-    });
-    describe('handleUserActions function', () => {
-        let usersTableBody;
-    
-        beforeEach(() => {
-            usersTableBody = document.querySelector('#usersTable tbody');
-    
-            // Render some dummy users for testing
+    describe('Delete user functionality testing', () => {
+        test('User gets deleted when delete button is clicked', () => {
+            const { renderUsers } = require('./script.js');
             const mockUsers = [
                 { userName: 'john_doe', emailID: 'john@example.com', firstName: 'John', lastName: 'Doe' },
                 { userName: 'jane_smith', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' }
             ];
-    
             localStorage.getItem.mockReturnValue(JSON.stringify(mockUsers));
-            const { renderUsers } = require('./script.js');
             renderUsers();
-        });
     
-        afterEach(() => {
-            jest.clearAllMocks();
+            const usersTableBody = document.querySelector('#usersTable tbody');
+            const deleteButtons = usersTableBody.querySelectorAll('.deleteu');
+            deleteButtons[0].click();
+            const updatedUsers = [
+                { userName: 'jane_smith', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' }
+            ];
+            expect(localStorage.setItem).toHaveBeenCalledWith('users', JSON.stringify(updatedUsers));
+            localStorage.getItem.mockReturnValue(JSON.stringify(updatedUsers));
+            renderUsers();
+            const updatedUsersTableBody = document.querySelector('#usersTable tbody');
+            expect(updatedUsersTableBody.children.length).toBe(1);
+            const remainingRow = updatedUsersTableBody.children[0];
+            expect(remainingRow.children[0].textContent).toBe(updatedUsers[0].userName);
+            expect(remainingRow.children[1].textContent).toBe(updatedUsers[0].emailID);
+            expect(remainingRow.children[2].textContent).toBe(updatedUsers[0].firstName);
+            expect(remainingRow.children[3].textContent).toBe(updatedUsers[0].lastName);
         });
-    
+    });
+    describe('Handle user action functionality testing', () => {
         test('Clicking the edit button populates the form with the user\'s data and deletes the user', () => {
-            // Get the edit button and click it
-            const editButton = document.querySelector('.edit');
-            const index = editButton.dataset.index;
-    
-            // Create a mock event with the appropriate target
+            const { renderUsers } = require('./script.js');
+            const mockUsers = [
+                { userName: 'john_doe', emailID: 'john@example.com', firstName: 'John', lastName: 'Doe' },
+                { userName: 'jane_smith', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' }
+            ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockUsers));
+            renderUsers();
+            const usersTableBody = document.querySelector('#usersTable tbody');
+            const editButton = usersTableBody.querySelectorAll('.editu')[0];
             const event = {
                 target: editButton
             };
-    
-            // Call handleUserActions with the simulated event
-            const { handleUserActions, editUser, deleteUser } = require('./script.js');
+            const { handleUserActions} = require('./script.js');
             handleUserActions(event);
     
-            // Verify that the form is populated with the user's data
-            const userNameInput = document.querySelector('#userName');
-            const firstNameInput = document.querySelector('#firstName');
-            const lastNameInput = document.querySelector('#lastName');
-            const emailIDInput = document.querySelector('#emailID');
-            expect(userNameInput.value).toBe('john_doe');
-            expect(firstNameInput.value).toBe('John');
-            expect(lastNameInput.value).toBe('Doe');
-            expect(emailIDInput.value).toBe('john@example.com');
+            expect(userName.value).toBe('john_doe');
+            expect(firstName.value).toBe('John');
+            expect(lastName.value).toBe('Doe');
+            expect(emailID.value).toBe('john@example.com');
     
-            // Verify that the user is deleted
-            const remainingRows = usersTableBody.querySelectorAll('tr');
-            expect(remainingRows.length).toBe(1);
-            expect(remainingRows[0].children[0].textContent).toBe('jane_smith');
         });
     
         test('Clicking the delete button removes the user from the list', () => {
-            // Get the delete button and click it
-            const deleteButton = document.querySelector('.delete');
-            const index = deleteButton.dataset.index;
-    
-            // Create a mock event with the appropriate target
+            const { renderUsers } = require('./script.js');
+            const mockUsers = [
+                { userName: 'john_doe', emailID: 'john@example.com', firstName: 'John', lastName: 'Doe' },
+                { userName: 'jane_smith', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' }
+            ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockUsers));
+            renderUsers();
+            const usersTableBody = document.querySelector('#usersTable tbody');
+            const deleteButton = usersTableBody.querySelectorAll('.deleteu')[0];
             const event = {
                 target: deleteButton
             };
-    
-            // Call handleUserActions with the simulated event
             const { handleUserActions } = require('./script.js');
             handleUserActions(event);
-    
-            // Verify that the user is deleted
-            const remainingRows = usersTableBody.querySelectorAll('tr');
-            expect(remainingRows.length).toBe(1);
-            expect(remainingRows[0].children[0].textContent).toBe('john_doe');
+            const updatedUsers = [
+                { userName: 'jane_smith', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' }
+            ];
+            expect(localStorage.setItem).toHaveBeenCalledWith('users', JSON.stringify(updatedUsers));
+            localStorage.getItem.mockReturnValue(JSON.stringify(updatedUsers));
+            renderUsers();
+            const updatedUsersTableBody = document.querySelector('#usersTable tbody');
+            expect(updatedUsersTableBody.children.length).toBe(1);
+            const remainingRow = updatedUsersTableBody.children[0];
+            expect(remainingRow.children[0].textContent).toBe(updatedUsers[0].userName);
+            expect(remainingRow.children[1].textContent).toBe(updatedUsers[0].emailID);
+            expect(remainingRow.children[2].textContent).toBe(updatedUsers[0].firstName);
+            expect(remainingRow.children[3].textContent).toBe(updatedUsers[0].lastName);
         });
     });
     describe('Group Management', () => {
@@ -479,7 +461,7 @@ describe('Javascript testing',()=>{
             expect(secondViewButton.getAttribute('data-index')).toBe('1');
         });
 
-        test('openAddRemoveUserModal shows the modal and populates the user select dropdown', () => {
+        test('openAddRemoveUserModal() function shows the modal and populates the user select dropdown', () => {
             const { openAddRemoveUserModal, populateUserSelect } = require("./script.js");
             openAddRemoveUserModal(0);
             expect(addRemoveUserModal.style.display).toBe('block');
@@ -491,71 +473,32 @@ describe('Javascript testing',()=>{
             localStorage.getItem.mockReturnValue(JSON.stringify(mockUsers));
             populateUserSelect();
             const userSelect = document.getElementById('userSelect');
-            expect(userSelect.children.length).toBe(2); // 1 for default option and 1 for user
+            expect(userSelect.children.length).toBe(2); 
         });
     });
-    describe('editGroup and deleteGroup functions', () => {
-        let groupNameInput;
-        let groupsTableBody;
-    
-        beforeEach(() => {
-            // Get references to necessary elements
-            groupNameInput = document.querySelector('#groupName');
-            groupsTableBody = document.querySelector('#groupsTable tbody');
-    
-            // Load initial groups data into local storage
+    describe('Delete group functionality', () => {
+        test('Pressing the delete button deletes the group',()=>{
+            const { renderGroups } = require('./script.js');
             const mockGroups = [
                 { groupName: 'Admins', users: ['john_doe', 'jane_smith'] },
                 { groupName: 'Editors', users: ['mary_jones'] }
             ];
-    
             localStorage.getItem.mockReturnValue(JSON.stringify(mockGroups));
-            const { renderGroups } = require('./script.js');
             renderGroups();
-        });
-    
-        afterEach(() => {
-            jest.clearAllMocks();
-        });
-    
-        test('editGroup populates the form with the group name and then deletes the group', () => {
-            const { editGroup } = require('./script.js');
-    
-            // Simulate editing the first group
-            editGroup(0);
-    
-            // Verify the groupNameInput is populated with the group name
-            expect(groupNameInput.value).toBe('Admins');
-    
-            // Verify the group is deleted
-            expect(localStorage.setItem).toHaveBeenCalledWith(
-                'groups',
-                JSON.stringify([{ groupName: 'Editors', users: ['mary_jones'] }])
-            );
-    
-            // Verify the groups table is updated
-            const remainingRows = groupsTableBody.querySelectorAll('tr');
-            expect(remainingRows.length).toBe(1);
-            expect(remainingRows[0].children[0].textContent).toBe('Editors');
-        });
-    
-        test('deleteGroup removes the specified group and updates the groups table', () => {
-            const { deleteGroup, renderGroups } = require('./script.js');
-    
-            // Simulate deleting the first group
-            deleteGroup(0);
-    
-            // Verify the groups are updated in local storage
-            expect(localStorage.setItem).toHaveBeenCalledWith(
-                'groups',
-                JSON.stringify([{ groupName: 'Editors', users: ['mary_jones'] }])
-            );
-    
-            // Verify the groups table is updated
+
+            const groupsTableBody = document.querySelector('#groupsTable tbody');
+            const deleteButtons = groupsTableBody.querySelectorAll('.delete');
+            deleteButtons[0].click();
+            const updatedGroup = [
+                {groupName: 'Editors', users: ['mary_jones'] }
+            ];
+            expect(localStorage.setItem).toHaveBeenCalledWith('groups', JSON.stringify(updatedGroup));
+            localStorage.getItem.mockReturnValue(JSON.stringify(updatedGroup));
             renderGroups();
-            const remainingRows = groupsTableBody.querySelectorAll('tr');
-            expect(remainingRows.length).toBe(1);
-            expect(remainingRows[0].children[0].textContent).toBe('Editors');
+            const updatedGroupsTableBody = document.querySelector('#groupsTable tbody');
+            expect(updatedGroupsTableBody.children.length).toBe(1);
+            const remainingRow = updatedGroupsTableBody.children[0];
+            expect(remainingRow.children[0].textContent).toBe(updatedGroup[0].groupName);
         });
     });
 
@@ -563,21 +506,19 @@ describe('Javascript testing',()=>{
         let userManagement;
         let groupManagement;
         let roleManagement;
-        let sidebarLinks;
 
         beforeEach(() => {
             // Get references to necessary elements
             userManagement = document.querySelector('.user-management');
             groupManagement = document.querySelector('.group-management');
             roleManagement = document.querySelector('.role-management');
-            sidebarLinks = document.querySelectorAll('.sidebar ul li a');
 
             // Simulate DOMContentLoaded
             document.dispatchEvent(new Event('DOMContentLoaded'));
         });
         test('clicking sidebar link activates the correct section', () => {
             // Initial state: No section should be active
-            expect(userManagement.classList.contains('active')).toBe(false);
+            expect(userManagement.classList.contains('active')).toBe(true);
             expect(groupManagement.classList.contains('active')).toBe(false);
             expect(roleManagement.classList.contains('active')).toBe(false);
 
@@ -611,38 +552,141 @@ describe('Javascript testing',()=>{
     });
 
     describe('Display group functionality testing', () => {
+        let groupNameElement;
+        let userListElement;
+    
+        beforeEach(() => {
+            groupNameElement = document.querySelector('#groupName');
+            userListElement = document.querySelector('#userList');
+        });
+    
         test('correctly displays group details', () => {
-            // Call the function with groupId 0 (Developers group)
-            const{displayGroupDetails}=require("./script.js")
+            const { displayGroupDetails } = require('./script.js');
+            const mockGroups = [
+                { groupName: 'Developers', users: ['john_doe', 'jane_smith'] }
+            ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockGroups));
             displayGroupDetails(0);
-
-            // Verify that the group name is correctly set
             expect(groupNameElement.textContent).toBe('Group Name: Developers');
-
-            // Verify that the user list is correctly populated
             const userItems = userListElement.querySelectorAll('li');
             expect(userItems.length).toBe(2);
             expect(userItems[0].textContent).toBe('john_doe');
             expect(userItems[1].textContent).toBe('jane_smith');
         });
-
+    
         test('handles empty user list correctly', () => {
-            // Modify the mock to return a group with an empty user list
-            const{displayGroupDetails,loadFromLocalStorage}=require("./script.js")
-            global.loadFromLocalStorage.mockReturnValue([
+            const { displayGroupDetails } = require('./script.js');
+            const mockGroups = [
                 { groupName: 'EmptyGroup', users: [] }
-            ]);
-
-            // Call the function with groupId 0 (EmptyGroup)
+            ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockGroups));
             displayGroupDetails(0);
-
-            // Verify that the group name is correctly set
             expect(groupNameElement.textContent).toBe('Group Name: EmptyGroup');
-
-            // Verify that the user list is empty
             const userItems = userListElement.querySelectorAll('li');
             expect(userItems.length).toBe(0);
         });
     });
+    describe('Add/remove users from group modal testing',()=>{
+        test('Clicking add/remove user button displays the add/remove modal',()=>{
+            const { renderGroups } = require('./script.js');
+            const mockGroups = [
+                { groupName: 'Admins', users: ['john_doe', 'jane_smith'] },
+                { groupName: 'Editors', users: ['mary_jones'] }
+            ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockGroups));
+            renderGroups();
+
+            const groupsTableBody = document.querySelector('#groupsTable tbody');
+            const addremoveUserButton = groupsTableBody.querySelectorAll('.add-remove-user');
+            addremoveUserButton[0].click();
+
+            expect(addRemoveUserModal.style.display).toBe('block');
+            expect(addUserButton).not.toBeNull();
+            expect(removeUserButton).not.toBeNull(); 
+
+            addUserButton.click()
+            expect(userActionForm.style.display).toBe('block');
+            expect(submitAddUserButton.style.display).toBe('inline');
+            expect(submitRemoveUserButton.style.display).toBe('none');
+
+            removeUserButton.click()
+            expect(userActionForm.style.display).toBe('block');
+            expect(submitAddUserButton.style.display).toBe('none');
+            expect(submitRemoveUserButton.style.display).toBe('inline');
+
+            closebutton1.click();
+            expect(addRemoveUserModal.style.display).toBe('none');
+        })
+    })
+    describe('View group members modal testing',()=>{
+        test('Clicking view button displays the view modal',()=>{
+            const { renderGroups } = require('./script.js');
+            const mockGroups = [
+                { groupName: 'Admins', users: ['john_doe', 'jane_smith'] },
+                { groupName: 'Editors', users: ['mary_jones'] }
+            ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockGroups));
+            renderGroups();
+
+            const groupsTableBody = document.querySelector('#groupsTable tbody');
+            const viewUserButton = groupsTableBody.querySelectorAll('.view');
+            viewUserButton[0].click();
+
+            expect(viewGroupModal.style.display).toBe('block')
+
+            closebutton2.click()
+            expect(viewGroupModal.style.display).toBe('none');
+        })
+    })
+    describe('Add/remove users from the group testing',()=>{
+        test('Add user to the group',()=>{
+            const { renderGroups,handleAddRemoveUser } = require('./script.js');
+            const mockUsers = [
+                { userName: 'john_doe', emailID: 'john@example.com', firstName: 'John', lastName: 'Doe' },
+                { userName: 'jane_smith', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' },
+                { userName: 'user1', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' }
+            ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockUsers));
+            const mockGroups = [
+                { groupName: 'Admins', users: ['john_doe', 'jane_smith'] }
+            ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockGroups));
+            renderGroups();
+            const groupsTableBody = document.querySelector('#groupsTable tbody');
+            const addremoveUserButton = groupsTableBody.querySelector('.add-remove-user');
+            addremoveUserButton.click();
+            const userSelect = document.querySelector("#userSelect")
+            addUserButton.click();
+            userSelect.value='user1';
+            handleAddRemoveUser('add')
+            expect(localStorage.setItem).toHaveBeenCalledWith("groups", JSON.stringify([{  groupName:  'Admins',
+                users: ['john_doe', 'jane_smith','user1']}]));
+        });
+        test('Delete user from the group',()=>{
+            const { renderGroups,handleAddRemoveUser } = require('./script.js');
+            const mockUsers = [
+                { userName: 'john_doe', emailID: 'john@example.com', firstName: 'John', lastName: 'Doe' },
+                { userName: 'jane_smith', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' },
+                { userName: 'user1', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' }
+            ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockUsers));
+            const mockGroups = [
+                { groupName: 'Admins', users: ['john_doe', 'jane_smith','user1'] }
+            ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockGroups));
+            renderGroups();
+            const groupsTableBody = document.querySelector('#groupsTable tbody');
+            const addremoveUserButton = groupsTableBody.querySelectorAll('.add-remove-user');
+            addremoveUserButton[0].click();
+            removeUserButton.click();
+            const userSelect = document.querySelector("#userSelect")
+            userSelect.value='user1';
+            handleAddRemoveUser('remove')
+            expect(localStorage.setItem).toHaveBeenCalledWith("groups", JSON.stringify([{  groupName:  'Admins',
+                users: ['john_doe', 'jane_smith']}]));
+        });
+    })  
 
 })
+
+

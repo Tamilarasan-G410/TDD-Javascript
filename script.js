@@ -13,14 +13,19 @@ const emailIDInput = document.querySelector('#emailID');
 const addUserForm = document.querySelector('.add-user form');
 const usersTableBody = document.querySelector('#usersTable tbody');
 const addButton = document.querySelector('.addButton');
+const actionButtons = document.querySelector("#actionButtons")
+const addUserModalBtn = document.querySelector('.newUser')
+const addUserModal = document.querySelector('.addUserModal')
 
 // Group Management (group.html)
 const groupNameInput = document.querySelector('#groupName');
 const createGroupForm = document.querySelector('#createGroupForm');
 const groupsTableBody = document.querySelector('#groupsTable tbody');
-const selectGroup = document.querySelector('#selectGroup');
-const selectUsers = document.querySelector('#selectUsers');
 const addUsersToGroupForm = document.querySelector('#addUsersToGroupForm');
+const addUserButton = document.querySelector("#showAddUserForm")
+const removeUserButton = document.querySelector('#showRemoveUserForm')
+const closebutton1 = document.querySelector(".close-btn1");
+const closebutton2 = document.querySelector(".close-btn2")
 
 // Modals
 const addRemoveUserModal = document.getElementById('addRemoveUserModal');
@@ -32,8 +37,30 @@ addUsersToGroupForm.addEventListener('submit', handleAddRemoveUser);
 groupsTableBody.addEventListener('click', handleGroupActions);
 addUserForm.addEventListener('submit', addUser);
 addButton.addEventListener('click',addUser)
+addUserModalBtn.addEventListener('click',()=>{
+addUserModal.style.display='block';
+})
 usersTableBody.addEventListener('click', handleUserActions);
-
+addUserButton.addEventListener('click', () => {
+    actionButtons.style.display='none';
+    document.getElementById('userActionForm').style.display = 'block';
+    document.getElementById('submitAddUserButton').style.display = 'inline';
+    document.getElementById('submitRemoveUserButton').style.display = 'none';
+    const groupId = document.getElementById('currentGroupId').value;
+    populateUserSelect(groupId, 'add');
+});
+removeUserButton.addEventListener('click', () => {
+    actionButtons.style.display='none';
+    document.getElementById('userActionForm').style.display = 'block';
+    document.getElementById('submitAddUserButton').style.display = 'none';
+    document.getElementById('submitRemoveUserButton').style.display = 'inline';
+    const groupId = document.getElementById('currentGroupId').value;
+    populateUserSelect(groupId, 'remove');
+});
+document.getElementById('submitAddUserButton').addEventListener('click', () => handleAddRemoveUser('add'));
+document.getElementById('submitRemoveUserButton').addEventListener('click', () => handleAddRemoveUser('remove'));
+closebutton1.addEventListener('click',closeAddRemoveUserModal)
+closebutton2.addEventListener('click',closeViewGroupModal)
 // Save to local storage
 function saveToLocalStorage(key, data) {
     localStorage.setItem(key, JSON.stringify(data));
@@ -48,6 +75,7 @@ function loadFromLocalStorage(key) {
 // User Management (index.html)
 function addUser(event) {
     event.preventDefault();
+    addUserModal.style.display='none';
     const user = {
         userName: userNameInput.value,
         firstName: firstNameInput.value,
@@ -72,8 +100,8 @@ function renderUsers() {
             <td>${user.firstName}</td>
             <td>${user.lastName}</td>
             <td>
-                <button class="edit" data-index="${index}">Edit</button>
-                <button class="delete" data-index="${index}">Delete</button>
+                <button class="editu" data-index="${index}">Edit</button>
+                <button class="deleteu" data-index="${index}">Delete</button>
             </td>
         `;
         usersTableBody.appendChild(row);
@@ -82,9 +110,9 @@ function renderUsers() {
 
 function handleUserActions(event) {
     const index = event.target.dataset.index;
-    if (event.target.classList.contains('edit')) {
+    if (event.target.classList.contains('editu')) {
         editUser(index);
-    } else if (event.target.classList.contains('delete')) {
+    } else if (event.target.classList.contains('deleteu')) {
         deleteUser(index);
     }
 }
@@ -129,7 +157,6 @@ function renderGroups() {
             <td>${group.groupName}</td>
             <td>
                 <button class="view" data-index="${index}">View group</button>
-                <button class="edit" data-index="${index}">Edit group name</button>
                 <button class="delete" data-index="${index}">Delete group</button>
                 <button class="add-remove-user" data-index="${index}">Add/Remove Users</button>
             </td>
@@ -142,8 +169,6 @@ function handleGroupActions(event) {
     const index = event.target.dataset.index;
     if (event.target.classList.contains('view')) {
         openViewGroupModal(index);
-    } else if (event.target.classList.contains('edit')) {
-        editGroup(index);
     } else if (event.target.classList.contains('delete')) {
         deleteGroup(index);
     } else if (event.target.classList.contains('add-remove-user')) {
@@ -153,50 +178,68 @@ function handleGroupActions(event) {
 
 function openAddRemoveUserModal(groupId) {
     addRemoveUserModal.style.display = 'block';
-    populateUserSelect();
     document.getElementById('currentGroupId').value = groupId;
+    document.getElementById('userActionForm').style.display = 'none'; // Hide the form initially
 }
-
 function closeAddRemoveUserModal() {
     addRemoveUserModal.style.display = 'none';
+    actionButtons.style.display='flex';
 }
 
-function handleAddRemoveUser(event) {
-    event.preventDefault();
+function handleAddRemoveUser(action) {
     const groupId = document.getElementById('currentGroupId').value;
-    const action = document.querySelector('input[name="action"]:checked').value;
     const userName = document.getElementById('userSelect').value;
 
     const groups = loadFromLocalStorage('groups');
+    const group = groups[groupId];
+
     if (action === 'add') {
-        const group = groups[groupId];
         if (!group.users.includes(userName)) {
             group.users.push(userName);
             saveToLocalStorage('groups', groups);
         }
     } else if (action === 'remove') {
-        const group = groups[groupId];
         const userIndex = group.users.indexOf(userName);
         if (userIndex > -1) {
             group.users.splice(userIndex, 1);
             saveToLocalStorage('groups', groups);
         }
     }
+
     closeAddRemoveUserModal();
     renderGroups();
 }
-
-function populateUserSelect() {
+function populateUserSelect(groupId = null, action = '') {
     const userSelect = document.getElementById('userSelect');
     const users = loadFromLocalStorage('users') || [];
+    const groups = loadFromLocalStorage('groups') || [];
+    
     userSelect.innerHTML = '<option value="">Select User</option>';
-    users.forEach(user => {
-        const option = document.createElement('option');
-        option.value = user.userName;
-        option.textContent = `${user.firstName} ${user.lastName} (${user.userName})`;
-        userSelect.appendChild(option);
-    });
+    
+    if (groupId !== null) {
+        const group = groups[groupId];
+        if (group) {
+            const usersInGroup = group.users;
+            users.forEach(user => {
+                if (action === 'add' && !usersInGroup.includes(user.userName) || 
+                    action === 'remove' && usersInGroup.includes(user.userName)) {
+                    const option = document.createElement('option');
+                    option.value = user.userName;
+                    option.textContent = `${user.userName}`;
+                    userSelect.appendChild(option);
+                }
+            });
+        }
+    } else {
+        users.forEach(user => {
+            const option = document.createElement('option');
+            option.value = user.userName;
+            option.textContent = `${user.userName}`;
+            userSelect.appendChild(option);
+        });
+    }
 }
+
 
 function openViewGroupModal(groupId) {
     viewGroupModal.style.display = 'block';
@@ -205,8 +248,8 @@ function openViewGroupModal(groupId) {
 
 function closeViewGroupModal() {
     viewGroupModal.style.display = 'none';
+    actionButtons.style.display='flex';
 }
-
 function displayGroupDetails(groupId) {
     const groups = loadFromLocalStorage('groups');
     const group = groups[groupId];
@@ -219,14 +262,6 @@ function displayGroupDetails(groupId) {
         userList.appendChild(userItem);
     });
 }
-
-function editGroup(index) {
-    const groups = loadFromLocalStorage('groups');
-    const group = groups[index];
-    groupNameInput.value = group.groupName;
-    deleteGroup(index);
-}
-
 function deleteGroup(index) {
     const groups = loadFromLocalStorage('groups');
     groups.splice(index, 1);
@@ -285,7 +320,8 @@ module.exports={
     displayGroupDetails,
     editUser,
     handleUserActions,
-    editGroup,
     deleteGroup,
-    loadFromLocalStorage
+    loadFromLocalStorage,
+    saveToLocalStorage,
+    handleAddRemoveUser
 }
