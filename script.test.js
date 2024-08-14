@@ -8,6 +8,8 @@ describe('HTML Testing', () => {
         });
 
         test('All html components are correctly displayed', () => {
+            const page= document.querySelector(".user-management")
+            const pageHeading = page.querySelector(".header")
             const formTitle = document.querySelector(".add-user h3 ")
             const userName = document.querySelector("#userName")
             const firstName = document.querySelector("#firstName")
@@ -18,8 +20,13 @@ describe('HTML Testing', () => {
             const userTable = document.querySelector('#usersTable');
             const userTableHeaders = document.querySelectorAll('#usersTable thead th');
             const userTableHeaderTexts = Array.from(userTableHeaders).map(header => header.textContent);
+            const addUserModal = document.querySelector(".newUser")
+             
+            //Title page of is displayed
+            expect(pageHeading.textContent).toBe('User management system')
+            // Add user button is displayed
+            expect(addUserModal).not.toBeNull()
 
-        
             //Whether the title of the form is present
             expect(formTitle).not.toBeNull();
             expect(formTitle.textContent).toBe('Add User')
@@ -73,21 +80,28 @@ describe('HTML Testing', () => {
 
         test('All html components are correctly displayed', () => {
            
-            // const groupHeading = document.querySelector('.group-management h2');
+            const page= document.querySelector(".group-management")
+            const pageHeading = page.querySelector(".header")
             const groupFormTitle = document.querySelector('.group-form h3')
             const groupForm = document.querySelector('#createGroupForm');
-            const groupLabel = document.querySelector('label[for="groupName"]');
             const groupInput = document.querySelector('#groupName');
             const groupButton = document.querySelector('.createGroup');
             const groupListTitle = document.querySelector('.group-list h3');
             const groupListTable = document.querySelector('#groupsTable');
             const groupListheaders = groupListTable.querySelectorAll('thead th');
             const groupListHeaderTexts = Array.from(groupListheaders).map(header => header.textContent.trim());
+            const addGroupModal = document.querySelector(".newGroup")
  
+            //Title page of is displayed
+             expect(pageHeading.textContent).toBe('Group management system')
+
+            //Add group button is displayed
+
+            expect(addGroupModal).not.toBeNull();
+    
             //Whether the create group form is displayed
             expect(groupFormTitle.textContent).toBe('Create Group');
             expect(groupForm).not.toBeNull();
-            expect(groupLabel.textContent).toBe('Group Name:');
             expect(groupInput).not.toBeNull();
             expect(groupInput.required).toBe(true);
             expect(groupButton.textContent).toBe('Create Group');
@@ -106,7 +120,8 @@ describe('HTML Testing', () => {
         });
 
         test('All html components are correctly displayed', () => {
-            const roleMangementHeading = document.querySelector('.role-management h2');
+            const page= document.querySelector(".role-management")
+            const pageHeading = page.querySelector(".header")
             const createRoleFormTitle = document.querySelector('.role-form h3');
             const createRoleForm = document.querySelector('.createRoleForm');
             const roleNameLabel = document.querySelector('label[for="roleName"]');
@@ -118,31 +133,17 @@ describe('HTML Testing', () => {
             const rolesListTable = document.querySelector('.rolesTable');
             const rolesListheaders = rolesListTable.querySelectorAll('thead th');
             const rolesListheadersTexts = Array.from(rolesListheaders).map(header => header.textContent.trim());
-            const assignRolesToUsersFormTitle = document.querySelector('.assign-role-to-user-form h3');
-            const assignRolesToUsersForm = document.querySelector('.assignRoleToUserForm');
-            const assignRolesToUsersLabel = document.querySelector('label[for="selectRole"]');
-            const assignRolesToUsersRoleSelect = document.querySelector('.selectRole');
-            const rolesToUsersLabel = document.querySelector('label[for="selectRoleUsers"]');
-            const rolesToUsersSelect = document.querySelector('.selectRoleUsers');
-            const assignRolesToUsersButton = document.querySelector('.assignRolesToUsersBtn');
-            const assignRolesToGroupFormTitle = document.querySelector('.assign-role-to-group-form h3');
-            const assignRolesToGroupForm = document.querySelector('.assignRoleToGroupForm');
-            const assignRolesToGroupLabel = document.querySelector('label[for="selectRoleForGroup"]');
-            const assignRolesToGroupRoleSelect = document.querySelector('.selectRoleForGroup');
-            const RolesToGroupsLabel = document.querySelector('label[for="selectRoleGroups"]');
-            const RolesToGroupsSelect = document.querySelector('.selectRoleGroups');
-            const assignButton = document.querySelector('.assignRolesToGroupsBtn');
-            const roleSectionTitle = document.querySelector('.view-role-assignments h3');
-            const roleAssignmentForm = document.querySelector('.viewRoleAssignmentsForm');
-            const roleLabel = document.querySelector('label[for="selectRoleToView"]');
-            const roleSelect = document.querySelector('.selectRoleToView');
-            const viewButton = document.querySelector('.viewAssignmentBtn');
-            const roleAssignmentTable = document.querySelector('.roleAssignmentsTable');
-            const roleAssignmentHeaders = roleAssignmentTable.querySelectorAll('thead th');
-            const roleAssignmentHeaderTexts = Array.from(roleAssignmentHeaders).map(header => header.textContent.trim());
+            const addRoleModal = document.querySelector('.newRole')
+            const rolesAssignmentsTile = document.querySelector('.role-list-assignments h3');
+            const rolesAssignmentsTable = document.querySelector('.rolesTableAssignments')
+            const rolesAssignmentsHeader = rolesAssignmentsTable.querySelectorAll('thead th');
+            const rolesAssignmentsHeaderTexts = Array.from(rolesAssignmentsHeader).map(header => header.textContent.trim());
+            
+            //Title page of is displayed
+            expect(pageHeading.textContent).toBe('Role management system')
 
-
-           
+            //Add role button is displayed
+            expect(addRoleModal).not.toBeNull();
 
             // Testing of create role form
             expect(createRoleFormTitle.textContent).toBe('Create Role');
@@ -159,38 +160,11 @@ describe('HTML Testing', () => {
             expect(rolesListTitle.textContent).toBe('Roles List');
             expect(rolesListTable).not.toBeNull();
             expect(rolesListheadersTexts).toEqual(['Role Name', 'Description', 'Actions']);
-        
-            //Test assign roles to user section
-            expect(assignRolesToUsersFormTitle.textContent).toBe('Assign Roles to Users');
-            expect(assignRolesToUsersForm).not.toBeNull();
-            expect(assignRolesToUsersLabel.textContent).toBe('Select Role:');
-            expect(assignRolesToUsersRoleSelect).not.toBeNull();
-            expect(assignRolesToUsersRoleSelect.required).toBe(true);
-            expect(rolesToUsersLabel.textContent).toBe('Select Users:');
-            expect(rolesToUsersSelect).not.toBeNull();
-            expect(rolesToUsersSelect.required).toBe(true);
-            expect(assignRolesToUsersButton.textContent).toBe('Assign Roles to Users');
-       
-            //Test assign roles to group section
-            expect(assignRolesToGroupFormTitle.textContent).toBe('Assign Roles to Groups');
-            expect(assignRolesToGroupForm).not.toBeNull();
-            expect(assignRolesToGroupLabel.textContent).toBe('Select Role:');
-            expect(assignRolesToGroupRoleSelect).not.toBeNull();
-            expect(assignRolesToGroupRoleSelect.required).toBe(true);
-            expect(RolesToGroupsLabel.textContent).toBe('Select Groups:');
-            expect(RolesToGroupsSelect).not.toBeNull();
-            expect(RolesToGroupsSelect.required).toBe(true);
-            expect(assignButton.textContent).toBe('Assign Roles to Groups');
-        
-            //Test view role assignment section
-            expect(roleSectionTitle.textContent).toBe('View Role Assignments');
-            expect(roleAssignmentForm).not.toBeNull();
-            expect(roleLabel.textContent).toBe('Select Role:');
-            expect(roleSelect).not.toBeNull();
-            expect(roleSelect.required).toBe(true);
-            expect(viewButton.textContent).toBe('View Assignments');
-            expect(roleAssignmentTable).not.toBeNull();
-            expect(roleAssignmentHeaderTexts).toEqual(['Users', 'Groups']);
+
+            //Testing roles assignment table
+            expect(rolesAssignmentsTile.textContent).toBe('Role assignments')
+            expect(rolesAssignmentsTable).not.toBeNull();
+            expect(rolesAssignmentsHeaderTexts).toEqual(['Role Name','Users','Groups'])
         });
     })
 });
@@ -207,6 +181,18 @@ describe('Javascript testing',()=>{
     let addUserButton, removeUserButton, submitAddUserButton, submitRemoveUserButton, userActionForm,addRemoveUserModal,viewGroupModal;
     let closebutton1;
     let closebutton2;
+    let addUserModalBtn;
+    let addUserModal;
+    let addGroupModalBtn;
+    let addGroupModal;
+    let addRoleModalBtn;
+    let addRoleModal;
+    let roleNameInput;
+    let roleNameDescriptionInput;
+    let createRoleForm;
+    let successmessage;
+    let successmessage2;
+    let successmessage3;
 
     beforeEach(()=>{
         const html = fs.readFileSync(path.resolve(__dirname, 'index.html'), 'utf8');
@@ -230,9 +216,25 @@ describe('Javascript testing',()=>{
         viewGroupModal=document.querySelector('#viewGroupModal')
         closebutton1=document.querySelector(".close-btn1");
         closebutton2=document.querySelector(".close-btn2");
+        addUserModalBtn=document.querySelector(".newUser")
+        addUserModal=document.querySelector(".addUserModal")
+        addGroupModalBtn=document.querySelector(".newGroup")
+        addGroupModal=document.querySelector(".addGroupModal")
+        addRoleModalBtn=document.querySelector(".newRole")
+        addRoleModal=document.querySelector(".addRoleModal")
+        roleNameInput=document.querySelector(".roleName")
+        roleNameDescriptionInput=document.querySelector(".roleDescription")
+        createRoleForm=document.querySelector(".createRoleForm")
+        successmessage = document.querySelector('#successmessage1')
+        successmessage2 = document.querySelector('#successmessage2')
+        successmessage3 = document.querySelector('#successmessage3')
 
         jest.resetModules();
         require('./script.js');
+
+        // mock timers
+        jest.useFakeTimers();
+        jest.spyOn(global, 'setTimeout');
 
         const localStorageMock = {
             getItem: jest.fn(),
@@ -250,6 +252,7 @@ describe('Javascript testing',()=>{
         localStorage.setItem.mockClear();
         localStorage.removeItem.mockClear();
         localStorage.clear.mockClear();
+        jest.useRealTimers(); 
     });
     describe('Sidebar testing',()=>{
         test('sidebar class toggles when logo is clicked', () => {
@@ -261,28 +264,94 @@ describe('Javascript testing',()=>{
         });
     })
     describe('Add user functionality testing',()=>{
+        test('Add user modal is displayed when the add user button is clicked',()=>{
+            addUserModalBtn.click();
+            expect(addUserModal.style.display).toBe('block');
+        })
         test('User gets added when all the necessary details are entered and submitted',()=>{
             userName.value='tamilarasan';
             firstName.value='tamil';
             lastName.value='arasan';
-            emailID.value='gugugaga';
+            emailID.value='gg.tamilarasan@gmail.com';
             form.dispatchEvent(new Event('submit'));
             expect(localStorage.setItem).toHaveBeenCalledWith("users", JSON.stringify([{  userName: 'tamilarasan',
                 firstName: 'tamil',
                 lastName: 'arasan',
-                emailID: 'gugugaga' }]));
+                emailID: 'gg.tamilarasan@gmail.com' }]));
+            expect(successmessage.style.display).toBe("block");   
+            expect(setTimeout).toHaveBeenCalledTimes(1);
+            expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 1800);
+            jest.runAllTimers();
+            expect(successmessage.style.display).toBe("none");
+
         })
         test('User gets added when all the necessary details are entered and press the add button',()=>{
             userName.value='tamilarasan';
             firstName.value='tamil';
             lastName.value='arasan';
-            emailID.value='gugugaga';
+            emailID.value='gg.tamilarasan@gmail.com';
             const addButton = document.querySelector('.addButton')
             addButton.click();
             expect(localStorage.setItem).toHaveBeenCalledWith("users", JSON.stringify([{  userName: 'tamilarasan',
                 firstName: 'tamil',
                 lastName: 'arasan',
-                emailID: 'gugugaga' }]));
+                emailID: 'gg.tamilarasan@gmail.com' }]));
+        })
+        test('User is not added when User name has numbers and symbols',()=>{
+            const errormessage1=document.querySelector('.error-message1')
+            userName.value='tamilarasan45@';
+            firstName.value='tamil';
+            lastName.value='arasan';
+            emailID.value='gg.tamilarasan@gmail.com';
+            form.dispatchEvent(new Event('submit'));
+            expect(localStorage.setItem).not.toHaveBeenCalledWith()
+            expect(errormessage1.innerHTML).toBe('User name should only contain letters');
+            expect(setTimeout).toHaveBeenCalledTimes(1);
+            expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 1800);
+            jest.runAllTimers();
+            expect(errormessage1.innerHTML).toBe("");
+        })
+        test('User is not added when first name has numbers and symbols',()=>{
+            const errormessage2=document.querySelector('.error-message2')
+            userName.value='tamilarasan';
+            firstName.value='tamil45@';
+            lastName.value='arasan';
+            emailID.value='gg.tamilarasan@gmail.com';
+            form.dispatchEvent(new Event('submit'));
+            expect(localStorage.setItem).not.toHaveBeenCalledWith()
+            expect(errormessage2.innerHTML).toBe('First name should only contain letters.');
+            expect(setTimeout).toHaveBeenCalledTimes(1);
+            expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 1800);
+            jest.runAllTimers();
+            expect(errormessage2.innerHTML).toBe("");
+        })
+        test('User is not added when last name has numbers and symbols',()=>{
+            const errormessage3=document.querySelector('.error-message3')
+            userName.value='tamilarasan';
+            firstName.value='tamil';
+            lastName.value='arasan45@';
+            emailID.value='gg.tamilarasan@gmail.com';
+            form.dispatchEvent(new Event('submit'));
+            expect(localStorage.setItem).not.toHaveBeenCalledWith()
+            expect(errormessage3.innerHTML).toBe('Last name should only contain letters');
+            expect(setTimeout).toHaveBeenCalledTimes(1);
+            expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 1800);
+            jest.runAllTimers();
+            expect(errormessage3.innerHTML).toBe("");
+        })
+        test('User is not added when emailid is not valid',()=>{
+            const errormessage4=document.querySelector('.error-message4')
+            userName.value='tamilarasan';
+            firstName.value='tamil';
+            lastName.value='arasan';
+            emailID.value='ggtamilarasangmailcom';
+            form.dispatchEvent(new Event('submit'));
+            expect(localStorage.setItem).not.toHaveBeenCalledWith()
+            expect(errormessage4.innerHTML).toBe('Not a valid emailID');
+            expect(setTimeout).toHaveBeenCalledTimes(1);
+            expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 1800);
+            jest.runAllTimers();
+            expect(errormessage4.innerHTML).toBe("");
         })
         test('Users are displayed in the user table after getting added',()=>{
             const {renderUsers}=require("./script.js")
@@ -423,6 +492,10 @@ describe('Javascript testing',()=>{
         });
     });
     describe('Group Management', () => {
+        test('Add group modal is displayed when the add group button is clicked',()=>{
+            addGroupModalBtn.click();
+            expect(addGroupModal.style.display).toBe('block');
+        })
         test('createGroup adds a group to localStorage and renders it', () => {
             groupNameInput.value = 'Developers';
             createGroupForm.dispatchEvent(new Event('submit'));
@@ -431,6 +504,11 @@ describe('Javascript testing',()=>{
                 groupName: 'Developers',
                 users: []
             }]));
+            expect(successmessage2.style.display).toBe("block");   
+            expect(setTimeout).toHaveBeenCalledTimes(1);
+            expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 1800);
+            jest.runAllTimers();
+            expect(successmessage2.style.display).toBe("none");
         });
 
         test('Groups are displayed in the group table after getting added', () => {
@@ -556,7 +634,7 @@ describe('Javascript testing',()=>{
         let userListElement;
     
         beforeEach(() => {
-            groupNameElement = document.querySelector('#groupName');
+            groupNameElement = document.querySelector('#viewGroupName');
             userListElement = document.querySelector('#userList');
         });
     
@@ -640,26 +718,27 @@ describe('Javascript testing',()=>{
     })
     describe('Add/remove users from the group testing',()=>{
         test('Add user to the group',()=>{
-            const { renderGroups,handleAddRemoveUser } = require('./script.js');
+            const { renderGroups} = require('./script.js');
             const mockUsers = [
                 { userName: 'john_doe', emailID: 'john@example.com', firstName: 'John', lastName: 'Doe' },
                 { userName: 'jane_smith', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' },
-                { userName: 'user1', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' }
+                { userName: 'user1', emailID: 'user1@example.com', firstName: 'User', lastName: 'One' }
             ];
-            localStorage.getItem.mockReturnValue(JSON.stringify(mockUsers));
             const mockGroups = [
                 { groupName: 'Admins', users: ['john_doe', 'jane_smith'] }
             ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockUsers));
             localStorage.getItem.mockReturnValue(JSON.stringify(mockGroups));
             renderGroups();
             const groupsTableBody = document.querySelector('#groupsTable tbody');
-            const addremoveUserButton = groupsTableBody.querySelector('.add-remove-user');
-            addremoveUserButton.click();
-            const userSelect = document.querySelector("#userSelect")
+            const addremoveUserButton = groupsTableBody.querySelectorAll('.add-remove-user');
+            addremoveUserButton[0].click();
             addUserButton.click();
-            userSelect.value='user1';
-            handleAddRemoveUser('add')
-            expect(localStorage.setItem).toHaveBeenCalledWith("groups", JSON.stringify([{  groupName:  'Admins',
+            const userSelect = document.querySelector('#userSelect');
+            userSelect.options[1].selected = true;
+            console.log(userSelect.innerHTML)
+            submitAddUserButton.click();
+            expect(localStorage.setItem).toHaveBeenCalledWith("groups", JSON.stringify([{ groupName:'Admins',
                 users: ['john_doe', 'jane_smith','user1']}]));
         });
         test('Delete user from the group',()=>{
@@ -686,7 +765,179 @@ describe('Javascript testing',()=>{
                 users: ['john_doe', 'jane_smith']}]));
         });
     })  
+    describe('Add role testing',()=>{
+        test('Add role modal is displayed when the add role button is clicked',()=>{
+            addRoleModalBtn.click();
+            expect(addRoleModal.style.display).toBe('block');
+        })
+        test('Pressing the create role button adds the role to localStorage and renders it', () => {
+            roleNameInput.value = 'Developers';
+            roleNameDescriptionInput.value='Write and develop code'
+            createRoleForm.dispatchEvent(new Event('submit'));
 
+            expect(localStorage.setItem).toHaveBeenCalledWith("roles", JSON.stringify([{
+                roleName: 'Developers',
+                roleDescription: 'Write and develop code'
+            }]));
+            expect(successmessage3.style.display).toBe("block");   
+            expect(setTimeout).toHaveBeenCalledTimes(1);
+            expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 1800);
+            jest.runAllTimers();
+            expect(successmessage3.style.display).toBe("none");
+        });
+        test('Roles are displayed in the role table after getting added', () => {
+            const { renderRoles } = require("./script.js");
+            const mockRoles = [
+                { roleName: 'Developers', roleDescription: 'Write and develop code' },
+                {  roleName: 'Managers', roleDescription: 'Manage the people'}
+            ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockRoles));
+
+            renderRoles();
+            const rolesTableBody = document.querySelector('.rolesTable tbody');
+            // Check the number of rows
+            expect(rolesTableBody.children.length).toBe(2);
+
+            // Check each row's content
+            const firstRow = rolesTableBody.children[0];
+            expect(firstRow.children[0].textContent).toBe(mockRoles[0].roleName);
+            expect(firstRow.children[1].textContent).toBe(mockRoles[0].roleDescription);
+            const firstAssignUsersButton = firstRow.querySelector('.roleU');
+            expect(firstAssignUsersButton.getAttribute('data-index')).toBe('0');
+            const firstAssignGroupsButton = firstRow.querySelector('.roleG');
+            expect(firstAssignGroupsButton.getAttribute('data-index')).toBe('0');
+
+
+            const secondRow = rolesTableBody.children[1];
+            expect(secondRow.children[0].textContent).toBe(mockRoles[1].roleName);
+            expect(secondRow.children[1].textContent).toBe(mockRoles[1].roleDescription);
+            const secondAssignUsersButton = secondRow.querySelector('.roleU');
+            expect(secondAssignUsersButton.getAttribute('data-index')).toBe('1');
+            const secondAssignGroupsButton = secondRow.querySelector('.roleG');
+            expect(secondAssignGroupsButton.getAttribute('data-index')).toBe('1');
+        });
+    })
+    describe('assignRole and AssignGroup modal closing',()=>{
+        test('Pressing the close button closes the assignUserToRole Modal and assignGroupRole modal',()=>{
+            const { renderRoles } = require("./script.js");
+            const mockRoles = [
+                { roleName: 'Developers', roleDescription: 'Write and develop code' },
+                {  roleName: 'Managers', roleDescription: 'Manage the people'}
+            ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockRoles));
+            renderRoles();
+            const rolesTableBody = document.querySelector('.rolesTable tbody');
+            const assignUserBtn = rolesTableBody.querySelectorAll('.roleU');
+            assignUserBtn[0].click();
+            const assignUsersModal = document.querySelector('#assignUsersModal');
+            expect(assignUsersModal.style.display).toBe('block');
+            const closebutton3 = document.querySelector('.close-btn3');
+            closebutton3.click();
+            expect(assignUsersModal.style.display).toBe('none');
+
+            const assignGroupBtn = rolesTableBody.querySelectorAll('.roleG');
+            assignGroupBtn[0].click();
+            const assignGroupsModal = document.querySelector('#assignGroupsModal');
+            expect(assignGroupsModal.style.display).toBe('block');
+            const closebutton4 = document.querySelector('.close-btn4');
+            closebutton4.click();
+            expect(assignGroupsModal.style.display).toBe('none');
+        })
+    })
+    describe('Display of details in the role assignement table',()=>{
+        test('Whether the details are displayed in the role assignment table',()=>{
+            const { renderRoles } = require("./script.js");
+            const mockRoles = [
+                { roleName: 'Developers', roleDescription: 'Write and develop code',assignedGroups:["naanga gethu thaan"],
+                    assignedUsers:["Tamilarasan",'g']},
+                {  roleName: 'Managers', roleDescription: 'Manage the people',assignedGroups:["naangaa gethu thaan"],
+                    assignedUsers:["Tamil",'b']}
+            ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockRoles));
+            renderRoles();
+            const rolesTableAssignments = document.querySelector('.rolesTableAssignments tbody');
+            const firstRow = rolesTableAssignments.children[0];
+            expect(firstRow.children[0].textContent).toBe('Developers');
+            expect(firstRow.children[1].textContent).toBe("Tamilarasan, g");
+            expect(firstRow.children[2].textContent).toBe("naanga gethu thaan");
+            const secondRow = rolesTableAssignments.children[1];
+            expect(secondRow.children[0].textContent).toBe( 'Managers');
+            expect(secondRow.children[1].textContent).toBe("Tamil, b");
+            expect(secondRow.children[2].textContent).toBe('naangaa gethu thaan');
+        })
+    })
+    describe('updateRoleAssignments functionality testing',()=>{
+        test('Testing the updateRoleAssignments function',()=>{
+            const { renderRoles,updateRoleAssignments } = require("./script.js");
+            const mockRoles = [
+                { roleName: 'Role1', roleDescription: 'Write and develop code',assignedGroups:[],
+                    assignedUsers:[]},
+                {  roleName: 'Role2', roleDescription: 'Manage the people',assignedGroups:[],
+                    assignedUsers:[]}
+            ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockRoles));
+            renderRoles();
+            const roleIndex = 1;
+            const userAssignments = ['User1', 'User2'];
+            const groupAssignments = ['Group1', 'Group2'];
+         // Call the function
+         updateRoleAssignments(roleIndex, userAssignments, groupAssignments);
+         expect(localStorage.setItem).toHaveBeenCalledWith('roles',JSON.stringify( [
+            { roleName: 'Role1', roleDescription: 'Write and develop code',assignedGroups: [] ,assignedUsers: []},
+            { roleName: 'Role2', roleDescription: 'Manage the people', assignedGroups: ['Group1', 'Group2'],assignedUsers: ['User1', 'User2'], },
+        ]));
+        })
+    })
+    describe('Add users and groups to the role',()=>{
+        test('Add users to the role',()=>{
+            const{renderRoles,updateRoleAssignments}=require("./script.js")
+            const mockRoles = [
+                { roleName: 'Role1', roleDescription: 'Write and develop code',assignedGroups:[],
+                    assignedUsers:[]},
+                {  roleName: 'Role2', roleDescription: 'Manage the people',assignedGroups:[],
+                    assignedUsers:[]}
+            ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockRoles));
+            renderRoles();
+            const rolesTableBody = document.querySelector('.rolesTable tbody');
+            const assignUserBtn = rolesTableBody.querySelectorAll('.roleU');
+            assignUserBtn[0].click();
+            const assignUser = document.querySelector("#assignUserButton")
+            assignUser.click();
+            const roleIndex = 1;
+            const userAssignments = ['User1', 'User2'];
+            const groupAssignments = [];
+            updateRoleAssignments(roleIndex, userAssignments, groupAssignments);
+            expect(localStorage.setItem).toHaveBeenCalledWith('roles',JSON.stringify( [
+                { roleName: 'Role1', roleDescription: 'Write and develop code',assignedGroups: [] ,assignedUsers: []},
+                { roleName: 'Role2', roleDescription: 'Manage the people', assignedGroups: [],assignedUsers: ['User1', 'User2'] }
+            ]));
+        })
+        test('Add Groups to the role',()=>{
+            const{renderRoles,updateRoleAssignments}=require("./script.js")
+            const mockRoles = [
+                { roleName: 'Role1', roleDescription: 'Write and develop code',assignedGroups:[],
+                    assignedUsers:[]},
+                {  roleName: 'Role2', roleDescription: 'Manage the people',assignedGroups:[],
+                    assignedUsers:[]}
+            ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockRoles));
+            renderRoles();
+            const rolesTableBody = document.querySelector('.rolesTable tbody');
+            const assignGroupBtn = rolesTableBody.querySelectorAll('.roleU');
+            assignGroupBtn[0].click();
+            const assignGroup = document.querySelector("#assignGroupButton")
+            assignGroup.click();
+            const roleIndex = 1;
+            const userAssignments = [];
+            const groupAssignments = ['Group1', 'Group2'];
+            updateRoleAssignments(roleIndex, userAssignments, groupAssignments);
+            expect(localStorage.setItem).toHaveBeenCalledWith('roles',JSON.stringify( [
+                { roleName: 'Role1', roleDescription: 'Write and develop code',assignedGroups: [] ,assignedUsers: []},
+                { roleName: 'Role2', roleDescription: 'Manage the people', assignedGroups: ['Group1', 'Group2'],assignedUsers: [] }
+            ]));
+        })
+    })
 })
 
 

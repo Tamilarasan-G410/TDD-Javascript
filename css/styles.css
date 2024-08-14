@@ -170,7 +170,6 @@ body{
 .user-list{
     display: flex;
     flex-direction: column;
-    /* justify-content: center; */
     align-items: center;
     width:100%;
     height:45%;
@@ -184,7 +183,7 @@ form{
     align-items: center;
 }
 form input{
-    padding: 0.5%;
+    padding: 2%;
     margin:1%;
     width:30%;
     outline: none;
@@ -219,11 +218,6 @@ table {
     border-collapse: collapse;
     border: 1px solid #ddd;
 }
-
-/* table, th, td {
-    border: 1px solid #ddd;
-} */
-
 th, td {
     padding: 8px;
     text-align: center;
@@ -252,6 +246,14 @@ table th:nth-child(5),
 table td:nth-child(5) {
     width: 20%; /* Adjust this percentage to your needs */
 }
+.role-management{
+    width:100%;
+    height:90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
 .group-management{
     width:100%;
     height:90%;
@@ -264,15 +266,11 @@ table td:nth-child(5) {
     margin:0%;
 }
 .group-form{
-    margin-top: 1%;
     width: 100%;
-    height: 20%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    height: 10%;
+    
 }
-.group-form-title,.group-list-title,.group-adddelete-title{
+.group-list-title,.role-list-title{
     height:5%;
     width:80%;
     display: flex;
@@ -282,7 +280,6 @@ table td:nth-child(5) {
     width:100%;
     height:45%;
     display: flex;
-    justify-content: center;
     align-items: center;
     flex-direction: column;
 }
@@ -385,7 +382,7 @@ form select {
 #submitAddUserButton:hover,#submitRemoveUserButton:hover{
     background-color: #422c80;
 }
-.modal-content2 {
+.modal-content3,.modal-content4{
     background-color: #fefefe;
     margin: 15% auto; 
     padding: 20px;
@@ -394,7 +391,16 @@ form select {
     height:50%;
     border-radius: 12px;
 }
-.close-btn1 {
+.modal-content2{
+    background-color: #fefefe;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%; 
+    height:50%;
+    border-radius: 12px;
+}
+.close-btn1,.close-btn2,.close-btn3,.close-btn4 {
     color: #aaa;
     float: right;
     font-size: 28px;
@@ -402,25 +408,17 @@ form select {
 }
 
 .close-btn1:hover,
-.close-btn1:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-.close-btn2 {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
+.close-btn1:focus,
 .close-btn2:hover,
-.close-btn2:focus {
+.close-btn2:focus,
+.close-btn3:hover,
+.close-btn3:focus,
+.close-btn4:hover,
+.close-btn4:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
 }
-
 .modal h3 {
     margin-top: 0;
 }
@@ -445,7 +443,7 @@ form select {
 }
  
 .view , .delete , .edit {
-    width:13%;
+    width:16%;
     height:20%;
     border-radius: 12px;
     background-color: #5D3FB3;
@@ -463,7 +461,7 @@ form select {
     color: white;
 }
 .add-remove-user{
-    width:19%;
+    width:23%;
     height:20%;
     border-radius: 12px;
     background-color: #5D3FB3;
@@ -480,8 +478,8 @@ form select {
     background-color: #5D3FB3;
     border-radius: 12px;
     color: white;
-    height:25%;
-    width: 10%;
+    height:12%;
+    width: 18%;
     border-color: #5D3FB3;
     font-size: 17px;
 }
@@ -532,4 +530,154 @@ form select {
     align-items: center;
 }
 
+.role-form{
+    width:100%;
+    height:10%;
+}
 
+.roleBtn{
+    margin-top: 3%;
+    width:80%;
+    height:100%;
+    display: flex;
+    justify-content:flex-end;
+    align-items: center;
+}
+.newRole{
+    height:50%;
+    width:10%;
+    font-size: 17px;
+    padding: 0.5%;
+    background-color: #5D3FB3;
+    border-color: #5D3FB3;
+    border-radius: 12px;
+    color: white;
+}
+.addRoleModal{
+    display: none;
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+}
+.addRoleModalContent{
+    background-color: #fefefe;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%; 
+    height:50%;
+    border-radius: 12px;
+}
+.createRoleForm{
+    display: flex;
+    align-items: center;
+}
+
+.groupBtn{
+    margin-top: 3%;
+    width:80%;
+    height:100%;
+    display: flex;
+    justify-content:flex-end;
+    align-items: center;
+}
+.newGroup{
+    height:50%;
+    width:10%;
+    font-size: 17px;
+    padding: 0.5%;
+    background-color: #5D3FB3;
+    border-color: #5D3FB3;
+    border-radius: 12px;
+    color: white;
+}
+.addGroupModal{
+    display: none;
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+}
+.addGroupModalContent{
+    background-color: #fefefe;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%; 
+    height:50%;
+    border-radius: 12px;
+}
+#createGroupForm{
+    display: flex;
+    align-items: center;
+}
+.role-list{
+    width:100%;
+    height:45%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.role-list-assignments{
+    width:100%;
+    height:40%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.roleG , .roleU{
+    width:25%;
+    height:20%;
+    border-radius: 12px;
+    background-color: #5D3FB3;
+    border: #5D3FB3;
+    font-size: 17px;
+    color: white;
+}
+.error-mesage1,.error-mesage2,.error-mesage3,.error-mesage4{
+    height:10%;
+    width:100%;
+}
+.addButton,.createRoleBtn{
+    padding: 1%;
+    width:25%;
+    height:7%;
+    border-radius: 12px;
+    background-color: #5D3FB3;
+    border: #5D3FB3;
+    font-size: 17px;
+    color: white;
+    margin-top: 5%;
+    margin-left: 30%;
+}
+.modal-content2 li{
+    list-style-type:disc;
+    margin: 2%;
+}
+.headingG{
+    margin: 2%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.successmessage{
+    display: none;
+    position: absolute;
+    color: #270;
+    bottom: 1%;
+    right:3%;
+    z-index: 50;
+    background-color: #DFF2BF;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 3px 3px 3px 3px;
+}
