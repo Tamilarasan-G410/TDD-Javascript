@@ -263,6 +263,54 @@ describe('Javascript testing',()=>{
             expect(sidebar.classList.contains('active')).toBe(false);
         });
     })
+    describe('DOMContentLoaded Event Listener and Sidebar Navigation', () => {
+        let userManagement;
+        let groupManagement;
+        let roleManagement;
+
+        beforeEach(() => {
+            // Get references to necessary elements
+            userManagement = document.querySelector('.user-management');
+            groupManagement = document.querySelector('.group-management');
+            roleManagement = document.querySelector('.role-management');
+
+            // Simulate DOMContentLoaded
+            document.dispatchEvent(new Event('DOMContentLoaded'));
+        });
+        test('clicking sidebar link activates the correct section', () => {
+            // Initial state: No section should be active
+            expect(userManagement.classList.contains('active')).toBe(true);
+            expect(groupManagement.classList.contains('active')).toBe(false);
+            expect(roleManagement.classList.contains('active')).toBe(false);
+
+            // Simulate clicking the user management link
+            const userLink = document.querySelector('a[href="#user-management"]');
+            userLink.click();
+
+            // Verify that the correct section is active
+            expect(userManagement.classList.contains('active')).toBe(true);
+            expect(groupManagement.classList.contains('active')).toBe(false);
+            expect(roleManagement.classList.contains('active')).toBe(false);
+
+            // Simulate clicking the group management link
+            const groupLink = document.querySelector('a[href="#group-management"]');
+            groupLink.click();
+
+            // Verify that the correct section is active
+            expect(userManagement.classList.contains('active')).toBe(false);
+            expect(groupManagement.classList.contains('active')).toBe(true);
+            expect(roleManagement.classList.contains('active')).toBe(false);
+
+            // Simulate clicking the role management link
+            const roleLink = document.querySelector('a[href="#role-management"]');
+            roleLink.click();
+
+            // Verify that the correct section is active
+            expect(userManagement.classList.contains('active')).toBe(false);
+            expect(groupManagement.classList.contains('active')).toBe(false);
+            expect(roleManagement.classList.contains('active')).toBe(true);
+        });
+    });
     describe('Add user functionality testing',()=>{
         test('Add user modal is displayed when the add user button is clicked',()=>{
             addUserModalBtn.click();
@@ -386,7 +434,7 @@ describe('Javascript testing',()=>{
             expect(secondDeleteButton.getAttribute('data-index')).toBe('1');
         })
     })
-    describe('Edit functionality testing',()=>{
+    describe('Edit user functionality testing',()=>{
         test('editUser function populates the form with user data and deletes the user', () => {
             const { editUser} = require('./script.js');
             const mockUsers = [
@@ -491,12 +539,12 @@ describe('Javascript testing',()=>{
             expect(remainingRow.children[3].textContent).toBe(updatedUsers[0].lastName);
         });
     });
-    describe('Group Management', () => {
+    describe('Add group functionality testing', () => {
         test('Add group modal is displayed when the add group button is clicked',()=>{
             addGroupModalBtn.click();
             expect(addGroupModal.style.display).toBe('block');
         })
-        test('createGroup adds a group to localStorage and renders it', () => {
+        test('Pressing the create group button adds a group to localStorage and renders it', () => {
             groupNameInput.value = 'Developers';
             createGroupForm.dispatchEvent(new Event('submit'));
 
@@ -554,7 +602,7 @@ describe('Javascript testing',()=>{
             expect(userSelect.children.length).toBe(2); 
         });
     });
-    describe('Delete group functionality', () => {
+    describe('Delete group functionality testing', () => {
         test('Pressing the delete button deletes the group',()=>{
             const { renderGroups } = require('./script.js');
             const mockGroups = [
@@ -577,55 +625,6 @@ describe('Javascript testing',()=>{
             expect(updatedGroupsTableBody.children.length).toBe(1);
             const remainingRow = updatedGroupsTableBody.children[0];
             expect(remainingRow.children[0].textContent).toBe(updatedGroup[0].groupName);
-        });
-    });
-
-    describe('DOMContentLoaded Event Listener and Sidebar Navigation', () => {
-        let userManagement;
-        let groupManagement;
-        let roleManagement;
-
-        beforeEach(() => {
-            // Get references to necessary elements
-            userManagement = document.querySelector('.user-management');
-            groupManagement = document.querySelector('.group-management');
-            roleManagement = document.querySelector('.role-management');
-
-            // Simulate DOMContentLoaded
-            document.dispatchEvent(new Event('DOMContentLoaded'));
-        });
-        test('clicking sidebar link activates the correct section', () => {
-            // Initial state: No section should be active
-            expect(userManagement.classList.contains('active')).toBe(true);
-            expect(groupManagement.classList.contains('active')).toBe(false);
-            expect(roleManagement.classList.contains('active')).toBe(false);
-
-            // Simulate clicking the user management link
-            const userLink = document.querySelector('a[href="#user-management"]');
-            userLink.click();
-
-            // Verify that the correct section is active
-            expect(userManagement.classList.contains('active')).toBe(true);
-            expect(groupManagement.classList.contains('active')).toBe(false);
-            expect(roleManagement.classList.contains('active')).toBe(false);
-
-            // Simulate clicking the group management link
-            const groupLink = document.querySelector('a[href="#group-management"]');
-            groupLink.click();
-
-            // Verify that the correct section is active
-            expect(userManagement.classList.contains('active')).toBe(false);
-            expect(groupManagement.classList.contains('active')).toBe(true);
-            expect(roleManagement.classList.contains('active')).toBe(false);
-
-            // Simulate clicking the role management link
-            const roleLink = document.querySelector('a[href="#role-management"]');
-            roleLink.click();
-
-            // Verify that the correct section is active
-            expect(userManagement.classList.contains('active')).toBe(false);
-            expect(groupManagement.classList.contains('active')).toBe(false);
-            expect(roleManagement.classList.contains('active')).toBe(true);
         });
     });
 
@@ -709,7 +708,12 @@ describe('Javascript testing',()=>{
             const groupsTableBody = document.querySelector('#groupsTable tbody');
             const viewUserButton = groupsTableBody.querySelectorAll('.view');
             viewUserButton[0].click();
-
+            
+            const userList = document.querySelector('#userList');
+            const listItems = userList.getElementsByTagName('li');
+            expect(listItems).toHaveLength(2);
+            expect(listItems[0].textContent).toBe('john_doe');
+            expect(listItems[1].textContent).toBe('jane_smith');
             expect(viewGroupModal.style.display).toBe('block')
 
             closebutton2.click()
@@ -718,7 +722,7 @@ describe('Javascript testing',()=>{
     })
     describe('Add/remove users from the group testing',()=>{
         test('Add user to the group',()=>{
-            const { renderGroups} = require('./script.js');
+            const { renderGroups,renderUsers} = require('./script.js');
             const mockUsers = [
                 { userName: 'john_doe', emailID: 'john@example.com', firstName: 'John', lastName: 'Doe' },
                 { userName: 'jane_smith', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' },
@@ -729,29 +733,29 @@ describe('Javascript testing',()=>{
             ];
             localStorage.getItem.mockReturnValue(JSON.stringify(mockUsers));
             localStorage.getItem.mockReturnValue(JSON.stringify(mockGroups));
+            renderUsers();
             renderGroups();
             const groupsTableBody = document.querySelector('#groupsTable tbody');
             const addremoveUserButton = groupsTableBody.querySelectorAll('.add-remove-user');
             addremoveUserButton[0].click();
             addUserButton.click();
             const userSelect = document.querySelector('#userSelect');
-            userSelect.options[1].selected = true;
-            console.log(userSelect.innerHTML)
+            userSelect.value = 'user1'; 
             submitAddUserButton.click();
             expect(localStorage.setItem).toHaveBeenCalledWith("groups", JSON.stringify([{ groupName:'Admins',
                 users: ['john_doe', 'jane_smith','user1']}]));
         });
         test('Delete user from the group',()=>{
-            const { renderGroups,handleAddRemoveUser } = require('./script.js');
+            const { renderGroups} = require('./script.js');
             const mockUsers = [
                 { userName: 'john_doe', emailID: 'john@example.com', firstName: 'John', lastName: 'Doe' },
                 { userName: 'jane_smith', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' },
                 { userName: 'user1', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' }
             ];
-            localStorage.getItem.mockReturnValue(JSON.stringify(mockUsers));
             const mockGroups = [
                 { groupName: 'Admins', users: ['john_doe', 'jane_smith','user1'] }
             ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockUsers));
             localStorage.getItem.mockReturnValue(JSON.stringify(mockGroups));
             renderGroups();
             const groupsTableBody = document.querySelector('#groupsTable tbody');
@@ -760,10 +764,10 @@ describe('Javascript testing',()=>{
             removeUserButton.click();
             const userSelect = document.querySelector("#userSelect")
             userSelect.value='user1';
-            handleAddRemoveUser('remove')
-            expect(localStorage.setItem).toHaveBeenCalledWith("groups", JSON.stringify([{  groupName:  'Admins',
+            submitRemoveUserButton.click();
+            expect(localStorage.setItem).toHaveBeenCalledWith("groups", JSON.stringify([{ groupName:'Admins',
                 users: ['john_doe', 'jane_smith']}]));
-        });
+        })
     })  
     describe('Add role testing',()=>{
         test('Add role modal is displayed when the add role button is clicked',()=>{
