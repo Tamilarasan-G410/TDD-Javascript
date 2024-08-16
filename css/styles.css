@@ -387,7 +387,7 @@ form select {
     margin: 15% auto; 
     padding: 20px;
     border: 1px solid #888;
-    width: 80%; 
+    width: 50%; 
     height:50%;
     border-radius: 12px;
 }
@@ -680,4 +680,26 @@ form select {
     margin: 10px 0;
     padding: 10px;
     border-radius: 3px 3px 3px 3px;
+}
+
+#assignUserRole , #assignGroupRole{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 3%;
+}
+#assignUserButton , #assignGroupButton{
+    padding: 0.5%;
+    width:17%;
+    height:7%;
+    border-radius: 12px;
+    background-color: #5D3FB3;
+    border: #5D3FB3;
+    font-size: 17px;
+    color: white;
+    margin-top: 3%;
+    margin-left: 5%;
+}
+#assignUserSelect{
+    width:20%;
 }
