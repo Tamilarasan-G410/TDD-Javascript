@@ -5,7 +5,7 @@ logo.addEventListener('click', () => {
     sidebar.classList.toggle('active');
 });
 
-// User Management
+// User Management-queryselectors
 const userNameInput = document.querySelector('#userName');
 const firstNameInput = document.querySelector('#firstName');
 const lastNameInput = document.querySelector('#lastName');
@@ -21,7 +21,7 @@ const errormessage3 = document.querySelector('.error-message3')
 const errormessage4 = document.querySelector('.error-message4')
 const successmessage = document.querySelector('#successmessage1')
 
-// Group Management
+// Group Management-queryselectors
 const groupNameInput = document.querySelector('#groupName');
 const createGroupForm = document.querySelector('#createGroupForm');
 const groupsTableBody = document.querySelector('#groupsTable tbody');
@@ -36,8 +36,11 @@ const addRemoveUserModal = document.querySelector('#addRemoveUserModal');
 const viewGroupModal = document.querySelector('#viewGroupModal');
 const viewGroupName = document.querySelector('#viewGroupName');
 const successmessage2 = document.querySelector('#successmessage2')
+const userActionForm = document.querySelector('#userActionForm');
+const submitAddUserButton = document.querySelector('#submitAddUserButton')
+const submitRemoveUserButton = document.querySelector('#submitRemoveUserButton')
 
-// Role Management
+// Role Management-queryselectors
 const addRoleModalButton = document.querySelector(".newRole")
 const addRoleModal = document.querySelector(".addRoleModal")
 const roleNameInput = document.querySelector('.roleName');
@@ -81,22 +84,22 @@ addUserModal.style.display='block';
 usersTableBody.addEventListener('click', handleUserActions);
 addUserButton.addEventListener('click', () => {
     actionButtons.style.display='none';
-    document.querySelector('#userActionForm').style.display = 'block';
-    document.getElementById('submitAddUserButton').style.display = 'inline';
-    document.getElementById('submitRemoveUserButton').style.display = 'none';
-    const groupId = document.getElementById('currentGroupId').value;
+    userActionForm.style.display = 'block';
+    submitAddUserButton.style.display = 'inline';
+    submitRemoveUserButton.style.display = 'none';
+    const groupId = document.querySelector('#currentGroupId').value;
     populateUserSelect(groupId, 'add');
 });
 removeUserButton.addEventListener('click', () => {
     actionButtons.style.display='none';
-    document.getElementById('userActionForm').style.display = 'block';
-    document.getElementById('submitAddUserButton').style.display = 'none';
-    document.getElementById('submitRemoveUserButton').style.display = 'inline';
-    const groupId = document.getElementById('currentGroupId').value;
+    userActionForm.style.display = 'block';
+    submitAddUserButton.style.display = 'none';
+    submitRemoveUserButton.style.display = 'inline';
+    const groupId = document.querySelector('#currentGroupId').value;
     populateUserSelect(groupId, 'remove');
 });
-document.getElementById('submitAddUserButton').addEventListener('click', () => handleAddRemoveUser('add'));
-document.getElementById('submitRemoveUserButton').addEventListener('click', () => handleAddRemoveUser('remove'));
+submitAddUserButton.addEventListener('click', () => handleAddRemoveUser('add'));
+submitRemoveUserButton.addEventListener('click', () => handleAddRemoveUser('remove'));
 closebutton1.addEventListener('click',closeAddRemoveUserModal)
 closebutton2.addEventListener('click',closeViewGroupModal)
 addGroupModalButton.addEventListener('click',()=>{
@@ -161,6 +164,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 //user management
+
+//validation
 function validateUserInput(userName, firstName, lastName, emailID) {
     const namePattern = /^[A-Za-z]+$/; // Allows only letters
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email validation
@@ -199,6 +204,7 @@ function validateUserInput(userName, firstName, lastName, emailID) {
     }
     return true;
 }
+//Adding new user
 function addUser(event) {
     event.preventDefault();
     const userName = userNameInput.value.trim();
@@ -223,9 +229,9 @@ function addUser(event) {
             successmessage.style.display='none'
         }, 1800);
     }
-    
-    
 }
+
+//Render user
 function renderUsers() {
     const users = loadFromLocalStorage('users');
     usersTableBody.innerHTML = '';
@@ -245,6 +251,7 @@ function renderUsers() {
     });
 }
 
+//Handle user actions (edit and delete)
 function handleUserActions(event) {
     const index = event.target.dataset.index;
     if (event.target.classList.contains('editu')) {
@@ -254,6 +261,7 @@ function handleUserActions(event) {
     }
 }
 
+//Edit user details
 function editUser(index) {
     addUserModal.style.display='block';
     const users = loadFromLocalStorage('users');
@@ -265,6 +273,7 @@ function editUser(index) {
     deleteUser(index);
 }
 
+//Delete user
 function deleteUser(index) {
     const users = loadFromLocalStorage('users');
     users.splice(index, 1);
@@ -273,6 +282,8 @@ function deleteUser(index) {
 }
 
 // Group Management
+
+//Adding a new group
 function createGroup(event) {
     event.preventDefault();
     addGroupModal.style.display='none';
@@ -291,6 +302,7 @@ function createGroup(event) {
     }, 1800);
 }
 
+//Rendering groups
 function renderGroups() {
     const groups = loadFromLocalStorage('groups');
     groupsTableBody.innerHTML = '';
@@ -308,6 +320,7 @@ function renderGroups() {
     });
 }
 
+//Handle group actions
 function handleGroupActions(event) {
     const index = event.target.dataset.index;
     if (event.target.classList.contains('view')) {
@@ -329,6 +342,7 @@ function closeAddRemoveUserModal() {
     actionButtons.style.display='flex';
 }
 
+//Add or remove user from the group
 function handleAddRemoveUser(action) {
     const groupId = document.querySelector('#currentGroupId').value;
     const userName = document.querySelector('#userSelect').value;
@@ -350,6 +364,7 @@ function handleAddRemoveUser(action) {
     closeAddRemoveUserModal();
     renderGroups();
 }
+
 function populateUserSelect(groupId = null, action = '') {
     const userSelect = document.getElementById('userSelect');
     const users = loadFromLocalStorage('users') || [];
@@ -381,7 +396,6 @@ function populateUserSelect(groupId = null, action = '') {
     }
 }
 
-
 function openViewGroupModal(groupId) {
     viewGroupModal.style.display = 'block';
     displayGroupDetails(groupId);
@@ -391,6 +405,7 @@ function closeViewGroupModal() {
     viewGroupModal.style.display = 'none';
     actionButtons.style.display='flex';
 }
+
 function displayGroupDetails(groupId) {
     const groups = loadFromLocalStorage('groups');
     const group = groups[groupId];
@@ -403,6 +418,8 @@ function displayGroupDetails(groupId) {
         userList.appendChild(userItem);
     });
 }
+
+//Delete group
 function deleteGroup(index) {
     const groups = loadFromLocalStorage('groups');
     groups.splice(index, 1);
@@ -410,7 +427,9 @@ function deleteGroup(index) {
     renderGroups();
 }
 
-//role management
+//Role management
+
+//Adding a new role
 function createRole(event) {
     event.preventDefault();
     addRoleModal.style.display='none';
@@ -428,6 +447,8 @@ function createRole(event) {
         successmessage3.style.display='none'
     }, 1800);
 }
+
+//Render roles
 function renderRoles() {
     const roles = loadFromLocalStorage('roles');
     rolesTableBody.innerHTML = '';
@@ -457,6 +478,8 @@ function renderRoles() {
         rolesTableAssignmentsBody.appendChild(row);
     });
 }
+
+//Assigning role to user
 function handleAssignUser() {
     const roleIndex = parseInt(currentAssignUserRoleIndex.value);
     const userName = assignUserSelect.value;
@@ -472,6 +495,8 @@ function handleAssignUser() {
     }
     assignUsersModal.style.display = 'none';
 }
+
+//Assigning group to user
 function handleAssignGroup() {
     const roleIndex = parseInt(currentAssignGroupRoleIndex.value);
     const groupName = assignGroupSelect.value;
@@ -487,6 +512,7 @@ function handleAssignGroup() {
     }
     assignGroupsModal.style.display = 'none';
 }
+
 function openAssignUserModal(index) {
     assignUsersModal.style.display = 'block';
     assignUserSelect.innerHTML = '<option value="">Select User</option>';
@@ -502,6 +528,7 @@ function openAssignGroupModal(index) {
     document.querySelector('#currentAssignGroupRoleIndex').value = index;
     assignGroupRole.textContent = `Assign to Role: ${loadFromLocalStorage('roles')[index].roleName}`;
 }
+
 function populateUserSelectU() {
     const users = loadFromLocalStorage('users') || [];
     users.forEach(user => {
@@ -511,6 +538,7 @@ function populateUserSelectU() {
         assignUserSelect.appendChild(option);
     });
 }
+
 function populateGroupSelect() {
     const groups = loadFromLocalStorage('groups') || [];
     groups.forEach(group => {
@@ -520,6 +548,8 @@ function populateGroupSelect() {
         assignGroupSelect.appendChild(option);
     });
 }
+
+//Handling role action (add user and groups to roles)
 function handleRoleActions(event) {
     const index = event.target.dataset.index;
     if (event.target.classList.contains('roleU')) {
@@ -528,6 +558,7 @@ function handleRoleActions(event) {
         openAssignGroupModal(index);
     }
 }
+
 function updateRoleAssignments(roleIndex, userAssignments, groupAssignments) {
     const roles = loadFromLocalStorage('roles');
     if (roles[roleIndex]) {
