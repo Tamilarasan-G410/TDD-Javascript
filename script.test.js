@@ -269,46 +269,46 @@ describe('Javascript testing',()=>{
         let roleManagement;
 
         beforeEach(() => {
-            // Get references to necessary elements
             userManagement = document.querySelector('.user-management');
             groupManagement = document.querySelector('.group-management');
             roleManagement = document.querySelector('.role-management');
 
-            // Simulate DOMContentLoaded
             document.dispatchEvent(new Event('DOMContentLoaded'));
         });
         test('clicking sidebar link activates the correct section', () => {
-            // Initial state: No section should be active
             expect(userManagement.classList.contains('active')).toBe(true);
             expect(groupManagement.classList.contains('active')).toBe(false);
             expect(roleManagement.classList.contains('active')).toBe(false);
 
-            // Simulate clicking the user management link
             const userLink = document.querySelector('a[href="#user-management"]');
             userLink.click();
 
-            // Verify that the correct section is active
             expect(userManagement.classList.contains('active')).toBe(true);
             expect(groupManagement.classList.contains('active')).toBe(false);
             expect(roleManagement.classList.contains('active')).toBe(false);
 
-            // Simulate clicking the group management link
             const groupLink = document.querySelector('a[href="#group-management"]');
             groupLink.click();
 
-            // Verify that the correct section is active
             expect(userManagement.classList.contains('active')).toBe(false);
             expect(groupManagement.classList.contains('active')).toBe(true);
             expect(roleManagement.classList.contains('active')).toBe(false);
 
-            // Simulate clicking the role management link
             const roleLink = document.querySelector('a[href="#role-management"]');
             roleLink.click();
 
-            // Verify that the correct section is active
             expect(userManagement.classList.contains('active')).toBe(false);
             expect(groupManagement.classList.contains('active')).toBe(false);
             expect(roleManagement.classList.contains('active')).toBe(true);
+        });
+        test('handles case when userNavLink is not found', () => {
+            const userLink = document.querySelector('a[href="#user-management"]');
+            userLink.parentNode.removeChild(userLink);
+    
+            document.dispatchEvent(new Event('DOMContentLoaded'));
+    
+            const selectedLink = document.querySelector('.sidebar ul li a.selected');
+            expect(selectedLink).toBe(null); 
         });
     });
     describe('Add user functionality testing',()=>{
@@ -722,7 +722,7 @@ describe('Javascript testing',()=>{
     })
     describe('Add/remove users from the group testing',()=>{
         test('Add user to the group',()=>{
-            const { renderGroups,renderUsers} = require('./script.js');
+            const { renderGroups} = require('./script.js');
             const mockUsers = [
                 { userName: 'john_doe', emailID: 'john@example.com', firstName: 'John', lastName: 'Doe' },
                 { userName: 'jane_smith', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' },
@@ -731,9 +731,10 @@ describe('Javascript testing',()=>{
             const mockGroups = [
                 { groupName: 'Admins', users: ['john_doe', 'jane_smith'] }
             ];
-            localStorage.getItem.mockReturnValue(JSON.stringify(mockUsers));
-            localStorage.getItem.mockReturnValue(JSON.stringify(mockGroups));
-            renderUsers();
+            localStorage.getItem.mockImplementation((key) => {
+                if (key === 'users') return JSON.stringify(mockUsers);
+                if (key === 'groups') return JSON.stringify(mockGroups);
+            });
             renderGroups();
             const groupsTableBody = document.querySelector('#groupsTable tbody');
             const addremoveUserButton = groupsTableBody.querySelectorAll('.add-remove-user');
@@ -755,8 +756,10 @@ describe('Javascript testing',()=>{
             const mockGroups = [
                 { groupName: 'Admins', users: ['john_doe', 'jane_smith','user1'] }
             ];
-            localStorage.getItem.mockReturnValue(JSON.stringify(mockUsers));
-            localStorage.getItem.mockReturnValue(JSON.stringify(mockGroups));
+            localStorage.getItem.mockImplementation((key) => {
+                if (key === 'users') return JSON.stringify(mockUsers);
+                if (key === 'groups') return JSON.stringify(mockGroups);
+            });
             renderGroups();
             const groupsTableBody = document.querySelector('#groupsTable tbody');
             const addremoveUserButton = groupsTableBody.querySelectorAll('.add-remove-user');
@@ -821,7 +824,7 @@ describe('Javascript testing',()=>{
             expect(secondAssignGroupsButton.getAttribute('data-index')).toBe('1');
         });
     })
-    describe('assignRole and AssignGroup modal closing',()=>{
+    describe('assignRole and AssignGroup modal closing testing',()=>{
         test('Pressing the close button closes the assignUserToRole Modal and assignGroupRole modal',()=>{
             const { renderRoles } = require("./script.js");
             const mockRoles = [
@@ -871,7 +874,7 @@ describe('Javascript testing',()=>{
         })
     })
     describe('updateRoleAssignments functionality testing',()=>{
-        test('Testing the updateRoleAssignments function',()=>{
+        test('Testing the updateRoleAssignments function with valid role index',()=>{
             const { renderRoles,updateRoleAssignments } = require("./script.js");
             const mockRoles = [
                 { roleName: 'Role1', roleDescription: 'Write and develop code',assignedGroups:[],
@@ -884,62 +887,125 @@ describe('Javascript testing',()=>{
             const roleIndex = 1;
             const userAssignments = ['User1', 'User2'];
             const groupAssignments = ['Group1', 'Group2'];
-         // Call the function
-         updateRoleAssignments(roleIndex, userAssignments, groupAssignments);
-         expect(localStorage.setItem).toHaveBeenCalledWith('roles',JSON.stringify( [
+            // Call the function
+            updateRoleAssignments(roleIndex, userAssignments, groupAssignments);
+            expect(localStorage.setItem).toHaveBeenCalledWith('roles',JSON.stringify( [
             { roleName: 'Role1', roleDescription: 'Write and develop code',assignedGroups: [] ,assignedUsers: []},
             { roleName: 'Role2', roleDescription: 'Manage the people', assignedGroups: ['Group1', 'Group2'],assignedUsers: ['User1', 'User2'], },
         ]));
         })
+        test('Testing the updateRoleAssignments function with invalid role index', () => {
+            const { updateRoleAssignments } = require("./script.js");
+            const mockRoles = [
+                { roleName: 'Role1', roleDescription: 'Write and develop code', assignedGroups: [], assignedUsers: [] }
+            ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockRoles));
+            
+            const invalidRoleIndex = 1; // Index out of bounds for mockRoles
+            const userAssignments = ['User1', 'User2'];
+            const groupAssignments = ['Group1', 'Group2'];
+            
+            // Call the function
+            updateRoleAssignments(invalidRoleIndex, userAssignments, groupAssignments);
+            
+            // No role should be updated, so localStorage.setItem should not be called
+            expect(localStorage.setItem).not.toHaveBeenCalled();
+        });
     })
     describe('Add users and groups to the role',()=>{
         test('Add users to the role',()=>{
             const{renderRoles,updateRoleAssignments}=require("./script.js")
+            const mockUsers = [
+                { userName: 'john_doe', emailID: 'john@example.com', firstName: 'John', lastName: 'Doe' },
+                { userName: 'jane_smith', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' },
+                { userName: 'User1', emailID: 'jane@example.com', firstName: 'Jane', lastName: 'Smith' }
+            ];
             const mockRoles = [
                 { roleName: 'Role1', roleDescription: 'Write and develop code',assignedGroups:[],
                     assignedUsers:[]},
                 {  roleName: 'Role2', roleDescription: 'Manage the people',assignedGroups:[],
                     assignedUsers:[]}
             ];
-            localStorage.getItem.mockReturnValue(JSON.stringify(mockRoles));
+            localStorage.getItem.mockImplementation((key) => {
+                if (key === 'users') return JSON.stringify(mockUsers);
+                if (key === 'roles') return JSON.stringify(mockRoles);
+            });
             renderRoles();
             const rolesTableBody = document.querySelector('.rolesTable tbody');
             const assignUserBtn = rolesTableBody.querySelectorAll('.roleU');
             assignUserBtn[0].click();
+            const userSelect = document.querySelector('#assignUserSelect');
+            userSelect.value = 'User1'; 
             const assignUser = document.querySelector("#assignUserButton")
             assignUser.click();
-            const roleIndex = 1;
-            const userAssignments = ['User1', 'User2'];
-            const groupAssignments = [];
-            updateRoleAssignments(roleIndex, userAssignments, groupAssignments);
+            updateRoleAssignments(0, ['User1'], []);
             expect(localStorage.setItem).toHaveBeenCalledWith('roles',JSON.stringify( [
-                { roleName: 'Role1', roleDescription: 'Write and develop code',assignedGroups: [] ,assignedUsers: []},
-                { roleName: 'Role2', roleDescription: 'Manage the people', assignedGroups: [],assignedUsers: ['User1', 'User2'] }
+                { roleName: 'Role1', roleDescription: 'Write and develop code',assignedGroups: [] ,assignedUsers: ['User1']},
+                { roleName: 'Role2', roleDescription: 'Manage the people', assignedGroups: [],assignedUsers: [] }
             ]));
+            const mockRolesAfter = [
+                { roleName: 'Role1', roleDescription: 'Write and develop code',assignedGroups:[],
+                    assignedUsers:['User1']},
+                {  roleName: 'Role2', roleDescription: 'Manage the people',assignedGroups:[],
+                    assignedUsers:[]}
+            ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockRolesAfter));
+            renderRoles();
+            const rolesTableAssignments = document.querySelector('.rolesTableAssignments tbody');
+            const firstRow = rolesTableAssignments.children[0];
+            expect(firstRow.children[0].textContent).toBe('Role1');
+            expect(firstRow.children[1].textContent).toBe("User1");
+            expect(firstRow.children[2].textContent).toBe("");
+            const secondRow = rolesTableAssignments.children[1];
+            expect(secondRow.children[0].textContent).toBe( 'Role2');
+            expect(secondRow.children[1].textContent).toBe("");
+            expect(secondRow.children[2].textContent).toBe('');
         })
         test('Add Groups to the role',()=>{
             const{renderRoles,updateRoleAssignments}=require("./script.js")
+            const mockGroups = [
+                { groupName: 'Admins', users: ['john_doe', 'jane_smith'] }
+            ];
             const mockRoles = [
                 { roleName: 'Role1', roleDescription: 'Write and develop code',assignedGroups:[],
                     assignedUsers:[]},
                 {  roleName: 'Role2', roleDescription: 'Manage the people',assignedGroups:[],
                     assignedUsers:[]}
             ];
-            localStorage.getItem.mockReturnValue(JSON.stringify(mockRoles));
+            localStorage.getItem.mockImplementation((key) => {
+                if (key === 'groups') return JSON.stringify(mockGroups);
+                if (key === 'roles') return JSON.stringify(mockRoles);
+            });
             renderRoles();
             const rolesTableBody = document.querySelector('.rolesTable tbody');
-            const assignGroupBtn = rolesTableBody.querySelectorAll('.roleU');
-            assignGroupBtn[0].click();
+            const assignGroupBtn = rolesTableBody.querySelectorAll('.roleG');
+            assignGroupBtn[1].click();
+            const userSelect = document.querySelector('#assignGroupSelect');
+            userSelect.value = 'Admins'; 
             const assignGroup = document.querySelector("#assignGroupButton")
             assignGroup.click();
-            const roleIndex = 1;
-            const userAssignments = [];
-            const groupAssignments = ['Group1', 'Group2'];
-            updateRoleAssignments(roleIndex, userAssignments, groupAssignments);
+            updateRoleAssignments(1,[], ['Admins']);
             expect(localStorage.setItem).toHaveBeenCalledWith('roles',JSON.stringify( [
                 { roleName: 'Role1', roleDescription: 'Write and develop code',assignedGroups: [] ,assignedUsers: []},
-                { roleName: 'Role2', roleDescription: 'Manage the people', assignedGroups: ['Group1', 'Group2'],assignedUsers: [] }
+                { roleName: 'Role2', roleDescription: 'Manage the people', assignedGroups: ['Admins'],assignedUsers: [] }
             ]));
+            const mockRolesAfter = [
+                { roleName: 'Role1', roleDescription: 'Write and develop code',assignedGroups:[],
+                    assignedUsers:[]},
+                {  roleName: 'Role2', roleDescription: 'Manage the people',assignedGroups:['Admins'],
+                    assignedUsers:[]}
+            ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockRolesAfter));
+            renderRoles();
+            const rolesTableAssignments = document.querySelector('.rolesTableAssignments tbody');
+            const firstRow = rolesTableAssignments.children[0];
+            expect(firstRow.children[0].textContent).toBe('Role1');
+            expect(firstRow.children[1].textContent).toBe("");
+            expect(firstRow.children[2].textContent).toBe("");
+            const secondRow = rolesTableAssignments.children[1];
+            expect(secondRow.children[0].textContent).toBe( 'Role2');
+            expect(secondRow.children[1].textContent).toBe("");
+            expect(secondRow.children[2].textContent).toBe('Admins');
         })
     })
 })
