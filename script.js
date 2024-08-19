@@ -251,13 +251,17 @@ function renderUsers() {
     });
 }
 
-//Handle user actions (edit and delete)
 function handleUserActions(event) {
     const index = event.target.dataset.index;
-    if (event.target.classList.contains('editu')) {
-        editUser(index);
-    } else if (event.target.classList.contains('deleteu')) {
-        deleteUser(index);
+    const actionClass = Array.from(event.target.classList).find(cls => cls.startsWith('editu') || cls.startsWith('deleteu'));
+    
+    switch (actionClass) {
+        case 'editu':
+            editUser(index);
+            break;
+        case 'deleteu':
+            deleteUser(index);
+            break;
     }
 }
 
@@ -323,12 +327,20 @@ function renderGroups() {
 //Handle group actions
 function handleGroupActions(event) {
     const index = event.target.dataset.index;
-    if (event.target.classList.contains('view')) {
-        openViewGroupModal(index);
-    } else if (event.target.classList.contains('delete')) {
-        deleteGroup(index);
-    } else if (event.target.classList.contains('add-remove-user')) {
-        openAddRemoveUserModal(index);
+    const action = Array.from(event.target.classList).find(cls =>
+        ['view', 'delete', 'add-remove-user'].includes(cls)
+    );
+
+    switch (action) {
+        case 'view':
+            openViewGroupModal(index);
+            break;
+        case 'delete':
+            deleteGroup(index);
+            break;
+        case 'add-remove-user':
+            openAddRemoveUserModal(index);
+            break;
     }
 }
 
@@ -552,10 +564,16 @@ function populateGroupSelect() {
 //Handling role action (add user and groups to roles)
 function handleRoleActions(event) {
     const index = event.target.dataset.index;
-    if (event.target.classList.contains('roleU')) {
-        openAssignUserModal(index);
-    } else if (event.target.classList.contains('roleG')) {
-        openAssignGroupModal(index);
+    const action = Array.from(event.target.classList).find(cls =>
+        ['roleU', 'roleG'].includes(cls)
+    );
+    switch (action) {
+        case 'roleU':
+            openAssignUserModal(index);
+            break;
+        case 'roleG':
+            openAssignGroupModal(index);
+            break;
     }
 }
 
