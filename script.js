@@ -20,6 +20,7 @@ const errormessage2 = document.querySelector('.error-message2')
 const errormessage3 = document.querySelector('.error-message3')
 const errormessage4 = document.querySelector('.error-message4')
 const successmessage = document.querySelector('#successmessage1')
+const closebutton5 = document.querySelector('.close-btn5')
 
 // Group Management-queryselectors
 const groupNameInput = document.querySelector('#groupName');
@@ -40,6 +41,7 @@ const userActionForm = document.querySelector('#userActionForm');
 const submitAddUserButton = document.querySelector('#submitAddUserButton')
 const submitRemoveUserButton = document.querySelector('#submitRemoveUserButton')
 
+
 // Role Management-queryselectors
 const addRoleModalButton = document.querySelector(".newRole")
 const addRoleModal = document.querySelector(".addRoleModal")
@@ -59,7 +61,11 @@ const assignUserButton = document.querySelector('#assignUserButton');
 const assignGroupButton = document.querySelector('#assignGroupButton');
 const successmessage3 = document.querySelector('#successmessage3')
 
+
 //Event listeners
+closebutton5.addEventListener('click',()=>{
+    addUserModal.style.display='none';
+})
 rolesTableBody.addEventListener('click', handleRoleActions);
 closebutton3.addEventListener('click', () => {
     assignUsersModal.style.display = 'none';
