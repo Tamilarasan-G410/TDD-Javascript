@@ -216,10 +216,10 @@ table {
     margin-left: 4%;
     width: 80%;
     border-collapse: collapse;
-    border: 1px solid #ddd;
+    
 }
 th, td {
-    padding: 8px;
+    padding: 18px;
     text-align: center;
 }
 
@@ -240,11 +240,27 @@ table td:nth-child(4){
     overflow: hidden;
     text-overflow: ellipsis;
 }
+table th:last-child {
+    border-top-right-radius: 12px;
+}
+table th:first-child {
+    border-top-left-radius: 12px;
+}
+table tbody{
+    border-bottom: 1px solid #ddd;;
+}
 
 /* Set width for the fourth column */
 table th:nth-child(5),
 table td:nth-child(5) {
     width: 20%; /* Adjust this percentage to your needs */
+}
+tr:nth-child(even) {
+    background-color: #f2f2f2; /* Light grey for even rows */
+}
+
+tr:nth-child(odd) {
+    background-color: #ffffff; /* White for odd rows */
 }
 .role-management{
     width:100%;
@@ -456,15 +472,17 @@ form select {
     border: #5D3FB3;
     font-size: 17px;
     color: white;
+    padding: 1%;
 }
 .editu , .deleteu{
-    width:25%;
+    width:30%;
     height: 20%;
     border-radius: 12px;
     background-color: #5D3FB3;
     border: #5D3FB3;
     font-size: 17px;
     color: white;
+    padding: 2%;
 }
 .add-remove-user{
     width:23%;
@@ -474,6 +492,7 @@ form select {
     border: #5D3FB3;
     font-size: 17px;
     color: white;
+    padding: 1%;
 }
 
 .view:hover , .delete:hover , .edit:hover , .editu:hover , .deleteu:hover , .add-remove-user:hover{
@@ -481,16 +500,16 @@ form select {
 }
 .createGroup{
     margin-left:33%;
-    background-color: #5D3FB3;
+    background-color:green;
     border-radius: 12px;
     color: white;
-    height:12%;
+    height:8%;
     width: 18%;
-    border-color: #5D3FB3;
+    border-color: green;
     font-size: 17px;
 }
 .createGroup:hover{
-    background-color: #422c80;
+    background-color: rgb(1, 107, 1);
 }
 .userBtn{
     margin-top: 3%;
@@ -641,13 +660,14 @@ form select {
     flex-direction: column;
 }
 .roleG , .roleU{
-    width:25%;
+    width:35%;
     height:20%;
     border-radius: 12px;
     background-color: #5D3FB3;
     border: #5D3FB3;
     font-size: 17px;
     color: white;
+    padding:2%;
 }
 .error-mesage1,.error-mesage2,.error-mesage3,.error-mesage4{
     height:10%;
@@ -658,8 +678,8 @@ form select {
     width:25%;
     height:7%;
     border-radius: 12px;
-    background-color: #5D3FB3;
-    border: #5D3FB3;
+    background-color: green;
+    border: green;
     font-size: 17px;
     color: white;
     margin-top: 5%;
