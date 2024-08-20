@@ -11,17 +11,20 @@ body{
     height: 100%;
     width: 100%;   
 }
+
 .whole{
     width:100%;
     height:100%;
     margin: 0%;
     padding:0%;
 }
+
 .sidebar ul li a.selected{
     background-color: #ffffff;
     color: #1c1b2c;
 
 }
+
 .sidebar.active ul li a.selected{
     background-color: #ffffff;
     color: #1c1b2c;
@@ -47,8 +50,8 @@ body{
     height: 7%;
     display: flex;
     color: #fff;
-
 }
+
 .sidebar .logo_content .logo{
     width: 80%;
     display: flex;  
@@ -62,6 +65,7 @@ body{
     pointer-events: none;
 
 }
+
 .sidebar .logo_content .logo i{
     width: 25%;
     font-size: 25px;
@@ -69,6 +73,7 @@ body{
     align-items: center;
     justify-content: center;
 }
+
 .sidebar .logo_content .logo .logo_name{
     width: 75%;
     display: flex;
@@ -87,6 +92,7 @@ body{
     font-size: 30px;
     transform: translate(-50%);
 }
+
 .sidebar.active #btn{
     left: 90%;
     
@@ -98,7 +104,6 @@ body{
     line-height: 50px;
     list-style: none;
 }
-
 
 .sidebar ul li a{
     background-color: #5D3FB3;
@@ -112,6 +117,7 @@ body{
     text-align: center;
     white-space: nowrap;
 }
+
 .sidebar.active ul li a{
     background-color: #432d80;
     
@@ -148,6 +154,7 @@ body{
     /* padding:1% 2%; */
     transition: all 0.5s ease;
 }
+
 .header{
     width: 100%;
     height:70px;
@@ -157,16 +164,18 @@ body{
     justify-content: center;
     align-items: center;
     font-size: 27px;
-    
 }
+
 .sidebar.active ~ .main-content{
     width: calc(100% - 300px);
     left: 300px;
 }
+
 .add-user{
     width:100%;
     height:10%;
 }
+
 .user-list{
     display: flex;
     flex-direction: column;
@@ -174,6 +183,7 @@ body{
     width:100%;
     height:45%;
 }
+
 form{
     width: 100%;
     height: 100%;
@@ -182,6 +192,7 @@ form{
     justify-content: center;
     align-items: center;
 }
+
 form input{
     padding: 2%;
     margin:1%;
@@ -193,31 +204,36 @@ form input{
     border-top-right-radius: 17px;
     border-bottom-right-radius: 17px;
 }
+
 .form-title{
     height:5%;
     width:80%;
     display: flex;
     align-items: flex-start;
 }
+
 .form-title h3{
     margin: 0%;
 }
+
 .table-title{
     height:5%;
     width:80%;
     display: flex;
     align-items: flex-start;
 }
+
 .table-title h3{
     margin: 0%;
 }
+
 table {
     margin-top: 1%;
     margin-left: 4%;
     width: 80%;
-    border-collapse: collapse;
-    
+    border-collapse: collapse; 
 }
+
 th, td {
     padding: 18px;
     text-align: center;
@@ -227,7 +243,7 @@ th {
     background-color: #5D3FB3;
     color: white;
 }
-/* Set widths for the first three columns */
+
 table th:nth-child(1),
 table th:nth-child(2),
 table th:nth-child(3),
@@ -236,32 +252,36 @@ table td:nth-child(1),
 table td:nth-child(2),
 table td:nth-child(3),
 table td:nth-child(4){
-    width: 10%; /* Adjust this percentage to your needs */
+    width: 10%; 
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 table th:last-child {
     border-top-right-radius: 12px;
 }
+
 table th:first-child {
     border-top-left-radius: 12px;
 }
+
 table tbody{
     border-bottom: 1px solid #ddd;;
 }
 
-/* Set width for the fourth column */
 table th:nth-child(5),
 table td:nth-child(5) {
-    width: 20%; /* Adjust this percentage to your needs */
+    width: 20%; 
 }
+
 tr:nth-child(even) {
-    background-color: #f2f2f2; /* Light grey for even rows */
+    background-color: #f2f2f2; 
 }
 
 tr:nth-child(odd) {
-    background-color: #ffffff; /* White for odd rows */
+    background-color: #ffffff; 
 }
+
 .role-management{
     width:100%;
     height:90%;
@@ -270,6 +290,7 @@ tr:nth-child(odd) {
     align-items: center;
     flex-direction: column;
 }
+
 .group-management{
     width:100%;
     height:90%;
@@ -278,20 +299,23 @@ tr:nth-child(odd) {
     align-items: center;
     flex-direction: column;
 }
+
 .group-management h3{
     margin:0%;
 }
+
 .group-form{
     width: 100%;
     height: 10%;
-    
 }
+
 .group-list-title,.role-list-title{
     height:5%;
     width:80%;
     display: flex;
     align-items: flex-start;
 }
+
 .group-list{
     width:100%;
     height:45%;
@@ -299,6 +323,7 @@ tr:nth-child(odd) {
     align-items: center;
     flex-direction: column;
 }
+
 .adddelete-users-to-group-form{
     width:100%;
     height:30%;
@@ -307,11 +332,13 @@ tr:nth-child(odd) {
     align-items: center;
     flex-direction: column;
 }
+
 form select {
     width: 100%;
     padding: 8px;
     margin-top: 5px;
 }
+
 .user-management{
     width:100%;
     height:90%;
@@ -320,12 +347,15 @@ form select {
     align-items: center;
     flex-direction: column;
 }
+
 .user-management,.group-management,.role-management{
     display: none;
 }
+
 .user-management.active, .group-management.active, .role-management.active {
     display: block;
 }
+
 .modal {
     display: none;
     position: fixed; 
@@ -338,7 +368,6 @@ form select {
     background-color: rgba(0,0,0,0.4); 
 }
 
-/* Modal Content */
 .modal-content1 {
     background-color: #fefefe;
     margin: 15% auto; 
@@ -348,6 +377,7 @@ form select {
     height:50%;
     border-radius: 12px;
 }
+
 #actionButtons{
     height:80%;
     width:100%;
@@ -355,6 +385,7 @@ form select {
     align-items: center;
     justify-content: center;
 }
+
 .aub , .rub{
     width:25%;
     height:50%;
@@ -362,6 +393,7 @@ form select {
     justify-content: space-around;
     align-items: center;
 }
+
 #showRemoveUserForm{
     margin: 4%;
     padding: 4%;
@@ -372,12 +404,15 @@ form select {
     color: white;
     width: 65%;
 }
+
 #showRemoveUserForm:hover{
     background-color: #422c80;
 }
+
 #showAddUserForm:hover{
     background-color: #422c80;
 }
+
 #showAddUserForm{
     margin: 4%;
     padding: 4%;
@@ -388,6 +423,7 @@ form select {
     color: white;
     width: 65%;
 }
+
 #submitAddUserButton,#submitRemoveUserButton{
     background-color: #5D3FB3;
     border-radius: 12px;
@@ -395,9 +431,11 @@ form select {
     font-size: 17px;
     border-color: #5D3FB3;
 }
+
 #submitAddUserButton:hover,#submitRemoveUserButton:hover{
     background-color: #422c80;
 }
+
 .modal-content3,.modal-content4{
     background-color: #fefefe;
     margin: 15% auto; 
@@ -407,6 +445,7 @@ form select {
     height:50%;
     border-radius: 12px;
 }
+
 .modal-content2{
     background-color: #fefefe;
     margin: 15% auto; 
@@ -416,6 +455,7 @@ form select {
     height:50%;
     border-radius: 12px;
 }
+
 .close-btn1,.close-btn2,.close-btn3,.close-btn4,.close-btn5,.close-btn6,.close-btn7 {
     color: #aaa;
     float: right;
@@ -441,6 +481,7 @@ form select {
     text-decoration: none;
     cursor: pointer;
 }
+
 .modal h3 {
     margin-top: 0;
 }
@@ -464,7 +505,7 @@ form select {
     padding: 10px;
 }
  
-.view , .delete , .edit {
+.view , .delete{
     width:16%;
     height:20%;
     border-radius: 12px;
@@ -474,6 +515,7 @@ form select {
     color: white;
     padding: 1%;
 }
+
 .editu , .deleteu{
     width:30%;
     height: 20%;
@@ -484,6 +526,7 @@ form select {
     color: white;
     padding: 2%;
 }
+
 .add-remove-user{
     width:23%;
     height:20%;
@@ -498,6 +541,7 @@ form select {
 .view:hover , .delete:hover , .edit:hover , .editu:hover , .deleteu:hover , .add-remove-user:hover{
     background-color: #422c80;
 }
+
 .createGroup{
     margin-left:33%;
     background-color:green;
@@ -508,9 +552,11 @@ form select {
     border-color: green;
     font-size: 17px;
 }
+
 .createGroup:hover{
     background-color: rgb(1, 107, 1);
 }
+
 .userBtn{
     margin-top: 3%;
     width:80%;
@@ -519,6 +565,7 @@ form select {
     justify-content:flex-end;
     align-items: center;
 }
+
 .newUser{
     height:50%;
     width:10%;
@@ -530,9 +577,11 @@ form select {
     color: white;
     border: none;
 }
+
 .newUser:hover{
     background-color: #422c80;
 }
+
 .addUserModal{
     display: none;
     position: fixed; 
@@ -544,6 +593,7 @@ form select {
     background-color: rgb(0,0,0); 
     background-color: rgba(0,0,0,0.4); 
 }
+
 .addUserModalContent{
     background-color: #fefefe;
     margin: 15% auto; 
@@ -572,6 +622,7 @@ form select {
     justify-content:flex-end;
     align-items: center;
 }
+
 .newRole{
     height:50%;
     width:10%;
@@ -583,9 +634,11 @@ form select {
     color: white;
     border: none;
 }
+
 .newRole:hover{
     background-color: #422c80;
 }
+
 .addRoleModal{
     display: none;
     position: fixed; 
@@ -597,6 +650,7 @@ form select {
     background-color: rgb(0,0,0); 
     background-color: rgba(0,0,0,0.4); 
 }
+
 .addRoleModalContent{
     background-color: #fefefe;
     margin: 15% auto; 
@@ -606,6 +660,7 @@ form select {
     height:50%;
     border-radius: 12px;
 }
+
 .createRoleForm{
     display: flex;
     align-items: center;
@@ -619,6 +674,7 @@ form select {
     justify-content:flex-end;
     align-items: center;
 }
+
 .newGroup{
     height:50%;
     width:10%;
@@ -630,9 +686,11 @@ form select {
     color: white;
     border: none;
 }
+
 .newGroup:hover{
     background-color: #422c80;
 }
+
 .addGroupModal{
     display: none;
     position: fixed; 
@@ -644,6 +702,7 @@ form select {
     background-color: rgb(0,0,0); 
     background-color: rgba(0,0,0,0.4); 
 }
+
 .addGroupModalContent{
     background-color: #fefefe;
     margin: 15% auto; 
@@ -653,10 +712,12 @@ form select {
     height:50%;
     border-radius: 12px;
 }
+
 #createGroupForm{
     display: flex;
     align-items: center;
 }
+
 .role-list{
     width:100%;
     height:45%;
@@ -664,6 +725,7 @@ form select {
     align-items: center;
     flex-direction: column;
 }
+
 .role-list-assignments{
     width:100%;
     height:40%;
@@ -671,6 +733,7 @@ form select {
     align-items: center;
     flex-direction: column;
 }
+
 .roleG , .roleU{
     width:35%;
     height:20%;
@@ -681,10 +744,12 @@ form select {
     color: white;
     padding:2%;
 }
+
 .error-mesage1,.error-mesage2,.error-mesage3,.error-mesage4{
     height:10%;
     width:100%;
 }
+
 .addButton,.createRoleBtn{
     padding: 1%;
     width:25%;
@@ -697,16 +762,19 @@ form select {
     margin-top: 5%;
     margin-left: 30%;
 }
+
 .modal-content2 li{
     list-style-type:disc;
     margin: 2%;
 }
+
 .headingG{
     margin: 2%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 .successmessage{
     display: none;
     position: absolute;
@@ -726,6 +794,7 @@ form select {
     align-items: center;
     margin-bottom: 3%;
 }
+
 #assignUserButton , #assignGroupButton{
     padding: 0.5%;
     width:17%;
@@ -738,9 +807,11 @@ form select {
     margin-top: 3%;
     margin-left: 5%;
 }
+
 #assignUserSelect{
     width:20%;
 }
+
 .cb{
     display: flex;
     justify-content: flex-end;
