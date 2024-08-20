@@ -400,7 +400,7 @@ form select {
     height:50%;
     border-radius: 12px;
 }
-.close-btn1,.close-btn2,.close-btn3,.close-btn4 {
+.close-btn1,.close-btn2,.close-btn3,.close-btn4,.close-btn5,.close-btn6,.close-btn7 {
     color: #aaa;
     float: right;
     font-size: 28px;
@@ -414,7 +414,13 @@ form select {
 .close-btn3:hover,
 .close-btn3:focus,
 .close-btn4:hover,
-.close-btn4:focus {
+.close-btn4:focus,
+.close-btn5:hover,
+.close-btn5:focus,
+.close-btn6:hover,
+.close-btn6:focus,
+.close-btn7:hover,
+.close-btn7:focus  {
     color: black;
     text-decoration: none;
     cursor: pointer;
@@ -702,4 +708,9 @@ form select {
 }
 #assignUserSelect{
     width:20%;
+}
+.cb{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }
