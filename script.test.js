@@ -124,9 +124,7 @@ describe('HTML Testing', () => {
             const pageHeading = page.querySelector(".header")
             const createRoleFormTitle = document.querySelector('.role-form h3');
             const createRoleForm = document.querySelector('.createRoleForm');
-            const roleNameLabel = document.querySelector('label[for="roleName"]');
             const roleNameInput = document.querySelector('.roleName');
-            const roleDescriptionLabel = document.querySelector('label[for="roleDescription"]');
             const roleDescriptionInput = document.querySelector('.roleDescription');
             const createRoleButton = document.querySelector('.createRoleBtn');
             const rolesListTitle = document.querySelector('.role-list h3');
@@ -148,11 +146,11 @@ describe('HTML Testing', () => {
             // Testing of create role form
             expect(createRoleFormTitle.textContent).toBe('Create Role');
             expect(createRoleForm).not.toBeNull();
-            expect(roleNameLabel.textContent).toBe('Role Name:');
             expect(roleNameInput).not.toBeNull();
+            expect(roleNameInput.getAttribute('placeholder')).toBe('Role Name');
             expect(roleNameInput.required).toBe(true);
-            expect(roleDescriptionLabel.textContent).toBe('Role Description:');
             expect(roleDescriptionInput).not.toBeNull();
+            expect(roleDescriptionInput.getAttribute('placeholder')).toBe('Role Description');
             expect(roleDescriptionInput.required).toBe(true);
             expect(createRoleButton.textContent).toBe('Create Role');
      
@@ -312,9 +310,12 @@ describe('Javascript testing',()=>{
         });
     });
     describe('Add user functionality testing',()=>{
-        test('Add user modal is displayed when the add user button is clicked',()=>{
+        test('Add user modal is displayed when the add user button is clicked and closed when the close button is clicked',()=>{
             addUserModalBtn.click();
             expect(addUserModal.style.display).toBe('block');
+            const closebutton5 = document.querySelector('.close-btn5');
+            closebutton5.click();
+            expect(addUserModal.style.display).toBe('none')
         })
         test('User gets added when all the necessary details are entered and submitted',()=>{
             userName.value='tamilarasan';
