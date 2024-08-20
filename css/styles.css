@@ -113,7 +113,7 @@ body{
     white-space: nowrap;
 }
 .sidebar.active ul li a{
-    background-color: #1c1b2c;
+    background-color: #432d80;
     
 }
 
@@ -528,6 +528,10 @@ form select {
     border-color: #5D3FB3;
     border-radius: 12px;
     color: white;
+    border: none;
+}
+.newUser:hover{
+    background-color: #422c80;
 }
 .addUserModal{
     display: none;
@@ -577,6 +581,10 @@ form select {
     border-color: #5D3FB3;
     border-radius: 12px;
     color: white;
+    border: none;
+}
+.newRole:hover{
+    background-color: #422c80;
 }
 .addRoleModal{
     display: none;
@@ -620,6 +628,10 @@ form select {
     border-color: #5D3FB3;
     border-radius: 12px;
     color: white;
+    border: none;
+}
+.newGroup:hover{
+    background-color: #422c80;
 }
 .addGroupModal{
     display: none;
