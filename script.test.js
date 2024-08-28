@@ -104,6 +104,7 @@ describe('HTML Testing', () => {
             expect(groupForm).not.toBeNull();
             expect(groupInput).not.toBeNull();
             expect(groupInput.required).toBe(true);
+            expect(groupInput.getAttribute('autocomplete')).toBe('off');
             expect(groupButton.textContent).toBe('Create Group');
               
             
@@ -150,8 +151,10 @@ describe('HTML Testing', () => {
             expect(roleNameInput.getAttribute('placeholder')).toBe('Role Name');
             expect(roleNameInput.required).toBe(true);
             expect(roleDescriptionInput).not.toBeNull();
+            expect(roleNameInput.getAttribute('autocomplete')).toBe('off');
             expect(roleDescriptionInput.getAttribute('placeholder')).toBe('Role Description');
             expect(roleDescriptionInput.required).toBe(true);
+            expect(roleDescriptionInput.getAttribute('autocomplete')).toBe('off');
             expect(createRoleButton.textContent).toBe('Create Role');
      
             //Testing roles list table
@@ -402,6 +405,15 @@ describe('Javascript testing',()=>{
             jest.runAllTimers();
             expect(errormessage4.innerHTML).toBe("");
         })
+        test('When the user table is empty , the "no data available" message is displayed',()=>{
+            const {renderUsers}=require("./script.js")
+            renderUsers()
+            const usersTableBody = document.querySelector('#usersTable tbody');
+            expect(usersTableBody.children.length).toBe(1);
+            const noDataMessageRow =  usersTableBody.querySelector('.no-data-message1');
+            expect(noDataMessageRow).not.toBeNull()
+            expect(noDataMessageRow.textContent).toBe('No data available');
+        })
         test('Users are displayed in the user table after getting added',()=>{
             const {renderUsers}=require("./script.js")
             const mockUsers = [
@@ -412,6 +424,8 @@ describe('Javascript testing',()=>{
             renderUsers();
             const usersTableBody = document.querySelector('#usersTable tbody');
             expect(usersTableBody.children.length).toBe(2);
+            const noDataMessageRow =  usersTableBody.querySelector('.no-data-message1');
+            expect(noDataMessageRow).toBeNull()
            // Test first row (John Doe)
             const firstRow = usersTableBody.children[0];
             expect(firstRow.children[0].textContent).toBe(mockUsers[0].userName);
@@ -485,6 +499,24 @@ describe('Javascript testing',()=>{
             expect(remainingRow.children[2].textContent).toBe(updatedUsers[0].firstName);
             expect(remainingRow.children[3].textContent).toBe(updatedUsers[0].lastName);
         });
+        test('When the user is deleted , whether the no data available message is displayed or not',()=>{
+            const { renderUsers } = require('./script.js');
+            const mockUsers = [
+                { userName: 'john_doe', emailID: 'john@example.com', firstName: 'John', lastName: 'Doe' }
+            ];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockUsers));
+            renderUsers();
+            const usersTableBody = document.querySelector('#usersTable tbody');
+            const deleteButton = usersTableBody.querySelector('.deleteu');
+            deleteButton.click();
+            const updatedUsers = [];
+            localStorage.getItem.mockReturnValue(JSON.stringify(updatedUsers));
+            renderUsers();
+            expect(usersTableBody.children.length).toBe(1);
+            const noDataMessageRow = usersTableBody.querySelector('.no-data-message1');
+            expect(noDataMessageRow).not.toBeNull()
+            expect(noDataMessageRow.textContent).toBe('No data available');
+        })
     });
     describe('Handle user action functionality testing', () => {
         test('Clicking the edit button populates the form with the user\'s data and deletes the user', () => {
@@ -559,7 +591,15 @@ describe('Javascript testing',()=>{
             jest.runAllTimers();
             expect(successmessage2.style.display).toBe("none");
         });
-
+        test('When the group table is empty , the "no data available" message is displayed',()=>{
+            const { renderGroups } = require("./script.js");
+            renderGroups()
+            const groupsTableBody = document.querySelector('#groupsTable tbody');
+            expect(groupsTableBody.children.length).toBe(1);
+            const noDataMessageRow =  groupsTableBody.querySelector('.no-data-message2');
+            expect(noDataMessageRow).not.toBeNull()
+            expect(noDataMessageRow.textContent).toBe('No data available');
+        })
         test('Groups are displayed in the group table after getting added', () => {
             const { renderGroups } = require("./script.js");
             const mockGroups = [
@@ -575,6 +615,8 @@ describe('Javascript testing',()=>{
             const groupsTableBody = document.querySelector('#groupsTable tbody');
             // Check the number of rows
             expect(groupsTableBody.children.length).toBe(2);
+            const noDataMessageRow =  groupsTableBody.querySelector('.no-data-message2');
+            expect(noDataMessageRow).toBeNull()
 
             // Check each row's content
             const firstRow = groupsTableBody.children[0];
@@ -627,6 +669,22 @@ describe('Javascript testing',()=>{
             const remainingRow = updatedGroupsTableBody.children[0];
             expect(remainingRow.children[0].textContent).toBe(updatedGroup[0].groupName);
         });
+        test('When  the group is deleted , whether the no data available message is displayed or not',()=>{
+            const { renderGroups } = require('./script.js');
+            const mockGroups = [{ groupName: 'Admins', users: ['john_doe', 'jane_smith'] }];
+            localStorage.getItem.mockReturnValue(JSON.stringify(mockGroups));
+            renderGroups();
+            const groupsTableBody = document.querySelector('#groupsTable tbody');
+            const deleteButton = groupsTableBody.querySelector('.delete');
+            deleteButton.click();
+            const updatedGroup = [];
+            localStorage.getItem.mockReturnValue(JSON.stringify(updatedGroup));
+            renderGroups();
+            expect(groupsTableBody.children.length).toBe(1);
+            const noDataMessageRow =  groupsTableBody.querySelector('.no-data-message2');
+            expect(noDataMessageRow).not.toBeNull()
+            expect(noDataMessageRow.textContent).toBe('No data available');
+        })
     });
 
     describe('Display group functionality testing', () => {
@@ -793,6 +851,18 @@ describe('Javascript testing',()=>{
             jest.runAllTimers();
             expect(successmessage3.style.display).toBe("none");
         });
+        test('When the role table and role assignment table are empty, the "no data available" message is displayed', () => {
+            const { renderRoles } = require("./script.js");
+            renderRoles();
+            const rolesTableBodies = document.querySelectorAll('.rolesTable tbody, .rolesTableAssignments tbody');
+            rolesTableBodies.forEach((tableBody) => {
+                expect(tableBody.children.length).toBe(1);
+                const noDataMessageRow = tableBody.querySelector('.no-data-message3');
+                expect(noDataMessageRow).not.toBeNull();
+                expect(noDataMessageRow.textContent).toBe('No data available');
+            });
+        });
+        
         test('Roles are displayed in the role table after getting added', () => {
             const { renderRoles } = require("./script.js");
             const mockRoles = [
