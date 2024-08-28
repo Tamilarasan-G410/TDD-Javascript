@@ -255,7 +255,28 @@ function renderUsers() {
         `;
         usersTableBody.appendChild(row);
     });
+    checkTableContentUsers();
 }
+
+//Display message when the table is empty
+function checkTableContentUsers() {
+    const tableBody = document.querySelector('#usersTable tbody');
+   
+    if (tableBody.rows.length === 0) {
+        
+        const messageRow = document.createElement('tr');
+        const messageCell = document.createElement('td');
+
+        messageCell.colSpan = 5; 
+        messageCell.textContent = 'No data available';
+
+        messageRow.classList.add('no-data-message1');
+
+        messageRow.appendChild(messageCell);
+        tableBody.appendChild(messageRow);
+    }
+}
+
 
 function handleUserActions(event) {
     const index = event.target.dataset.index;
@@ -328,6 +349,26 @@ function renderGroups() {
         `;
         groupsTableBody.appendChild(row);
     });
+    checkTableContentGroups()
+}
+
+//Display message when the table is empty
+function checkTableContentGroups() {
+    const tableBody = document.querySelector('#groupsTable tbody');
+    
+    if (tableBody.rows.length === 0) {
+       
+        const messageRow = document.createElement('tr');
+        const messageCell = document.createElement('td');
+
+        messageCell.colSpan = 2; 
+        messageCell.textContent = 'No data available';
+
+        messageRow.classList.add('no-data-message2');
+
+        messageRow.appendChild(messageCell);
+        tableBody.appendChild(messageRow);
+    }
 }
 
 //Handle group actions
@@ -494,6 +535,29 @@ function renderRoles() {
             <td>${role.assignedGroups ? role.assignedGroups.join(', ') : 'None'}</td>
         `;
         rolesTableAssignmentsBody.appendChild(row);
+    });
+    checkTableContentRoles()
+}
+
+//Display message when the table is empty
+function checkTableContentRoles() {
+    
+    const tables = document.querySelectorAll('.rolesTable tbody, .rolesTableAssignments tbody');
+
+    tables.forEach((table) => {
+        if (table.rows.length === 0) {
+            
+            const messageRow = document.createElement('tr');
+            const messageCell = document.createElement('td');
+
+            messageCell.colSpan = 3; 
+            messageCell.textContent = 'No data available';
+
+            messageRow.classList.add('no-data-message3');
+
+            messageRow.appendChild(messageCell);
+            table.appendChild(messageRow);
+        }
     });
 }
 
